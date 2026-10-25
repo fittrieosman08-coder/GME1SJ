@@ -1,0 +1,3806 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>MISI SEJARAH: LEGENDA ALAM MELAYU — Edisi Phone, Tablet & Web</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold-bright: #fff3a1;
+  --gold-light: #ffe270;
+  --gold-mid: #f59e0b;
+  --gold-dark: #92400e;
+  --wood-dark: #2c1405;
+  --wood-mid: #54280c;
+  --parchment-top: #fffdf7;
+  --parchment-bot: #f5ead2;
+  --royal-navy: #0a1931;
+  --royal-blue: #185adb;
+  --turquoise: #06b6d4;
+  --emerald: #16a34a;
+  --crimson: #dc2626;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+html, body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: #050e1d;
+  color: #1e293b;
+  overflow-x: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+  scroll-behavior: smooth;
+}
+
+/* KANVAS ZARAH KUNANG-KUNANG & KONFETI */
+#fx-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 95;
+}
+
+/* ANIMASI KREATIF */
+@keyframes floatShip {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1.2deg); }
+}
+@keyframes floatIsland {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+@keyframes pulseHalo {
+  0%, 100% { box-shadow: 0 0 15px rgba(251, 191, 36, 0.55), inset 0 2px 6px rgba(255,255,255,0.75); }
+  50% { box-shadow: 0 0 32px rgba(251, 191, 36, 0.95), 0 0 50px rgba(245, 158, 11, 0.55), inset 0 2px 8px rgba(255,255,255,0.9); }
+}
+@keyframes breatheAvatar {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-4px) scale(1.015); }
+}
+@keyframes shakeErr {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+@keyframes popInCard {
+  0% { transform: scale(0.94); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.anim-ship { animation: floatShip 4.5s ease-in-out infinite; }
+.anim-avatar { animation: breatheAvatar 3.6s ease-in-out infinite; }
+.shake-board { animation: shakeErr 0.42s ease; }
+
+/* STRUKTUR SKRIN RESPONSIF (PHONE, TABLET & WEB) */
+.screen {
+  display: none;
+  width: 100%;
+  min-height: calc(100dvh - 54px);
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.screen.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.scene-bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ================================================================= */
+/* BAR STATUS DIRAJA (RPG HUD ATAS — MELEKAT & RESPONSIF)            */
+/* ================================================================= */
+.rpg-hud-bar {
+  position: sticky;
+  top: 0;
+  z-index: 70;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  padding: 6px 14px;
+  background: linear-gradient(180deg, rgba(7, 19, 41, 0.97) 0%, rgba(16, 37, 76, 0.95) 100%);
+  backdrop-filter: blur(8px);
+  border-bottom: 3px solid #f59e0b;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.7);
+  color: #fff;
+}
+
+.hud-left-group, .hud-right-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.hud-pill {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid #fbbf24;
+  border-radius: 30px;
+  padding: 4px 11px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.77rem;
+  font-weight: 800;
+  color: #fef08a;
+  white-space: nowrap;
+}
+
+.xp-bar-wrap {
+  width: 75px;
+  height: 9px;
+  background: #091326;
+  border-radius: 10px;
+  border: 1px solid #fde047;
+  overflow: hidden;
+}
+.xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #84cc16, #fde047);
+  width: 0%;
+  transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hud-btn {
+  background: linear-gradient(180deg, #ffe57f 0%, #d97706 100%);
+  border: 2px solid #fffbeb;
+  color: #2b1202;
+  border-radius: 24px;
+  padding: 5px 12px;
+  font-weight: 900;
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.45);
+  transition: transform 0.15s ease, filter 0.15s ease;
+  white-space: nowrap;
+}
+.hud-btn:hover { transform: translateY(-1px); filter: brightness(1.08); }
+.hud-btn:active { transform: scale(0.96); }
+.hud-btn.blue {
+  background: linear-gradient(180deg, #38bdf8 0%, #1d4ed8 100%);
+  color: #fff;
+  border-color: #bae6fd;
+}
+.hud-btn.purple {
+  background: linear-gradient(180deg, #c084fc 0%, #6d28d9 100%);
+  color: #fff;
+  border-color: #e9d5ff;
+}
+
+/* ================================================================= */
+/* SKRIN 1: PEMBUKAAN SINEMATIK                                      */
+/* ================================================================= */
+.title-center-stage {
+  position: relative;
+  z-index: 10;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 16px 16px;
+}
+
+.royal-title-plaque {
+  background: radial-gradient(circle at 50% 15%, #69330c 0%, #2a1203 75%, #180901 100%);
+  border: 5px solid #fbbf24;
+  outline: 4px solid #78350f;
+  border-radius: 28px;
+  padding: 28px 36px 32px;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.85), inset 0 0 40px rgba(251, 191, 36, 0.3);
+  position: relative;
+  max-width: 700px;
+  width: 94%;
+}
+
+.kerawang-corner {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #fde047;
+  pointer-events: none;
+}
+.kerawang-corner.tl { top: 8px; left: 8px; border-right: none; border-bottom: none; border-radius: 12px 0 0 0; }
+.kerawang-corner.tr { top: 8px; right: 8px; border-left: none; border-bottom: none; border-radius: 0 12px 0 0; }
+.kerawang-corner.bl { bottom: 8px; left: 8px; border-right: none; border-top: none; border-radius: 0 0 0 12px; }
+.kerawang-corner.br { bottom: 8px; right: 8px; border-left: none; border-top: none; border-radius: 0 0 12px 0; }
+
+.royal-crest-top {
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, #fff3a1 0%, #f59e0b 65%, #92400e 100%);
+  color: #3a1b05;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 3px solid #fffbeb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.55rem;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.65);
+}
+
+.main-logo-title {
+  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+  font-size: clamp(1.85rem, 5vw, 3.8rem);
+  font-weight: 900;
+  background: linear-gradient(180deg, #ffffff 0%, #fff099 35%, #f59e0b 75%, #b45309 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 0 #261002) drop-shadow(0 8px 18px rgba(0,0,0,0.8));
+  letter-spacing: 2px;
+  line-height: 1.1;
+}
+
+.sub-logo-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.92rem, 2.2vw, 1.55rem);
+  font-weight: 800;
+  color: #fde047;
+  letter-spacing: 2.5px;
+  margin-top: 6px;
+  text-shadow: 0 3px 8px rgba(0,0,0,0.9);
+}
+
+.blue-ribbon-banner {
+  margin: 14px auto 0;
+  background: linear-gradient(180deg, #2563eb 0%, #1e3a8a 100%);
+  border: 2.5px solid #fde047;
+  border-radius: 12px;
+  padding: 8px 22px;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: clamp(0.78rem, 1.5vw, 1.02rem);
+  letter-spacing: 1px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.6);
+  display: inline-block;
+}
+
+.feature-badges-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+.feat-mini-badge {
+  background: rgba(254, 243, 199, 0.14);
+  border: 1.5px solid rgba(253, 224, 71, 0.55);
+  color: #fef08a;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.mula-game-btn {
+  margin-top: 20px;
+  background: linear-gradient(180deg, #fff099 0%, #f59e0b 45%, #b45309 100%);
+  border: 4px solid #fffbeb;
+  outline: 3px solid #5c2804;
+  border-radius: 45px;
+  padding: 14px 42px;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.15rem, 2.5vw, 1.8rem);
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 2px 5px rgba(50, 18, 2, 0.95);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  transition: transform 0.18s ease, filter 0.18s ease;
+  animation: pulseHalo 2.4s infinite;
+}
+.mula-game-btn:hover { transform: translateY(-3px) scale(1.04); filter: brightness(1.1); }
+.mula-game-btn:active { transform: scale(0.97); }
+
+.title-mascots-left {
+  position: absolute;
+  bottom: 0;
+  left: 1.5%;
+  z-index: 15;
+  width: clamp(200px, 26vw, 370px);
+  pointer-events: none;
+  filter: drop-shadow(0 14px 24px rgba(0,0,0,0.75));
+  animation: breatheAvatar 4s ease-in-out infinite;
+}
+
+/* ================================================================= */
+/* SKRIN 2: PETA PENGEMBARAAN NUSANTARA                              */
+/* ================================================================= */
+.screen-top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  position: relative;
+  z-index: 25;
+  padding: 10px 14px 4px;
+  flex-wrap: wrap;
+}
+
+.top-wooden-header {
+  position: relative;
+  z-index: 20;
+  background: linear-gradient(180deg, #173b70 0%, #091936 100%);
+  border: 3px solid #fbbf24;
+  outline: 2px solid #593209;
+  border-radius: 16px;
+  padding: 7px 26px;
+  text-align: center;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.7);
+}
+
+.top-wooden-header h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.95rem, 1.9vw, 1.4rem);
+  font-weight: 900;
+  color: #ffe885;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.95);
+  letter-spacing: 1px;
+}
+
+.top-wooden-header p {
+  font-size: clamp(0.7rem, 1.1vw, 0.86rem);
+  font-weight: 800;
+  color: #e0f2fe;
+  letter-spacing: 0.6px;
+  margin-top: 2px;
+}
+
+.map-islands-grid {
+  position: relative;
+  z-index: 15;
+  flex: 1;
+  max-width: 1280px;
+  width: 96%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px 24px;
+  align-items: center;
+  padding: 10px 12px 28px;
+}
+
+.island-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), filter 0.25s ease;
+  position: relative;
+  animation: floatIsland 5s ease-in-out infinite;
+}
+.island-node:nth-child(even) { animation-delay: -2.5s; }
+.island-node:hover {
+  transform: translateY(-7px) scale(1.03);
+  filter: drop-shadow(0 0 18px rgba(253, 224, 71, 0.6));
+}
+.island-node:active { transform: scale(0.97); }
+
+.island-art-wrap {
+  width: 100%;
+  max-width: 260px;
+  height: 132px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 12px 18px rgba(0,0,0,0.65));
+}
+
+.island-label-plaque {
+  background: linear-gradient(180deg, #fffbeb 0%, #f5deb3 100%);
+  border: 3px solid #d97706;
+  outline: 2px solid #451a03;
+  border-radius: 16px;
+  padding: 8px 14px 8px 38px;
+  min-width: 220px;
+  max-width: 290px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  margin-top: -12px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+}
+
+.island-num-badge {
+  position: absolute;
+  left: -13px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fde047, #d97706 65%, #78350f 100%);
+  border: 3px solid #fffbeb;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.55);
+  color: #ffffff;
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.85);
+}
+
+.island-zone-tag {
+  background: linear-gradient(180deg, #ea580c, #9a3412);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.65rem;
+  padding: 2px 10px;
+  border-radius: 10px;
+  display: inline-block;
+  margin-bottom: 2px;
+  border: 1px solid #fed7aa;
+}
+
+.island-zone-title {
+  font-weight: 900;
+  font-size: 0.83rem;
+  color: #271203;
+  line-height: 1.18;
+}
+
+.island-zone-sub {
+  font-weight: 700;
+  font-size: 0.72rem;
+  color: #78350f;
+  margin-top: 2px;
+}
+
+.island-stars-row {
+  position: absolute;
+  top: -12px;
+  right: -6px;
+  background: linear-gradient(180deg, #0f172a, #1e293b);
+  border: 2px solid #fbbf24;
+  border-radius: 20px;
+  padding: 2px 8px;
+  font-size: 0.7rem;
+  font-weight: 900;
+  color: #fde047;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+}
+
+/* ================================================================= */
+/* SKRIN 3: PAPAN PERMAINAN ZON                                      */
+/* ================================================================= */
+.zone-workspace {
+  position: relative;
+  z-index: 15;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 14px;
+  max-width: 1350px;
+  width: 97%;
+  margin: 4px auto 20px;
+  align-items: start;
+}
+
+.zone-left-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: sticky;
+  top: 64px;
+}
+
+.subq-pill-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 20;
+}
+
+.subq-pill-btn {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 5px 12px rgba(0,0,0,0.45);
+}
+
+.subq-pill-btn.inactive {
+  background: linear-gradient(180deg, #1d569e 0%, #0d2b57 100%);
+  border: 2.5px solid #7cb3f5;
+  color: #ffffff;
+}
+
+.subq-pill-btn.active {
+  background: linear-gradient(180deg, #ffe885 0%, #f59e0b 100%);
+  border: 3px solid #fffbeb;
+  outline: 2px solid #78350f;
+  color: #2b1202;
+  transform: translateX(4px);
+}
+
+/* GELEMBUNG DIALOG WATAK PEMBESAR */
+.companion-dialogue-bubble {
+  background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+  border: 2.5px solid #d97706;
+  border-radius: 14px;
+  padding: 9px 12px;
+  font-size: 0.77rem;
+  font-weight: 800;
+  color: #451a03;
+  line-height: 1.38;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.45);
+  position: relative;
+}
+.companion-dialogue-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px 8px 0;
+  border-style: solid;
+  border-color: #d97706 transparent;
+}
+
+.zone-character-box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,0.7));
+}
+
+.character-name-tag {
+  background: linear-gradient(180deg, #451a03, #270e01);
+  border: 2px solid #fbbf24;
+  color: #fde047;
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 900;
+  padding: 3px 12px;
+  border-radius: 12px;
+  margin-top: -10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+}
+
+/* PAPAN MANUSKRIP SOALAN (KANAN) */
+.parchment-board-outer {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+}
+
+.parchment-frame {
+  background: linear-gradient(180deg, var(--parchment-top) 0%, var(--parchment-bot) 100%);
+  border: 5px solid #eab308;
+  outline: 3px solid #5c2d06;
+  border-radius: 22px;
+  padding: 16px 20px 26px;
+  box-shadow: 0 18px 42px rgba(0,0,0,0.7), inset 0 0 30px rgba(217, 155, 38, 0.2);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.parchment-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-bottom: 2px solid rgba(146, 64, 14, 0.25);
+  padding-bottom: 6px;
+}
+
+.q-header-title {
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+  font-size: clamp(1rem, 1.7vw, 1.32rem);
+  color: #271203;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.q-markah-label {
+  font-style: italic;
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: #451a03;
+  background: linear-gradient(180deg, #fef08a, #fde047);
+  border: 2px solid #d97706;
+  padding: 3px 12px;
+  border-radius: 16px;
+}
+
+.q-stimulus-box {
+  background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+  border: 2px solid #d99b38;
+  border-left: 6px solid #d97706;
+  border-radius: 12px;
+  padding: 8px 13px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #3b2108;
+  line-height: 1.42;
+}
+
+.q-prompt-text {
+  font-size: clamp(0.92rem, 1.28vw, 1.05rem);
+  font-weight: 800;
+  color: #1c1309;
+  line-height: 1.42;
+}
+
+/* BAR ALATAN KREATIF & KUASA BANTUAN */
+.board-helper-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  background: linear-gradient(90deg, rgba(254, 243, 199, 0.9), rgba(253, 230, 138, 0.6));
+  border: 2px solid #eab308;
+  border-radius: 12px;
+  padding: 7px 10px;
+}
+
+.mode-switch-group {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.mini-tool-btn {
+  background: #ffffff;
+  border: 2px solid #b45309;
+  color: #451a03;
+  border-radius: 9px;
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.14s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 34px;
+}
+.mini-tool-btn:hover { background: #fef3c7; }
+.mini-tool-btn:active { transform: scale(0.96); }
+.mini-tool-btn.active-mode {
+  background: linear-gradient(180deg, #1d4ed8, #1e3a8a);
+  color: #fff;
+  border-color: #93c5fd;
+}
+.mini-tool-btn.power-gold {
+  background: linear-gradient(180deg, #fef08a, #f59e0b);
+  color: #3b1803;
+  border-color: #92400e;
+}
+.mini-tool-btn.keyword-on {
+  background: linear-gradient(180deg, #a7f3d0, #10b981);
+  color: #064e3b;
+  border-color: #047857;
+}
+
+/* SOROTAN KATA KUNCI SEJARAH */
+mark.kw-hl {
+  background: linear-gradient(180deg, #fef08a 0%, #facc15 100%);
+  color: #1e1305;
+  padding: 0 4px;
+  border-radius: 4px;
+  font-weight: 900;
+}
+
+/* TIRAI HAFAL & DEDAH */
+.flashcard-curtain {
+  background: repeating-linear-gradient(45deg, #fef3c7, #fef3c7 12px, #fde68a 12px, #fde68a 24px);
+  border: 2px dashed #d97706;
+  border-radius: 11px;
+  padding: 11px 14px;
+  color: #78350f;
+  font-weight: 800;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.flashcard-revealed {
+  background: linear-gradient(180deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 2px solid #10b981;
+  border-radius: 11px;
+  padding: 11px 14px;
+  color: #064e3b;
+  font-weight: 800;
+  font-size: 0.86rem;
+  cursor: pointer;
+  line-height: 1.42;
+  animation: popInCard 0.2s ease;
+}
+
+/* SLOT SASARAN AKTIF (MEMUDAHKAN SENTUHAN PHONE/TABLET) */
+.target-slot-active {
+  outline: 3px solid #2563eb !important;
+  background: #dbeafe !important;
+  color: #1e3a8a !important;
+  box-shadow: 0 0 12px rgba(37, 99, 235, 0.45) !important;
+}
+
+/* SUSUN ATUR SLOT JAWAPAN */
+.gold-bars-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 640px;
+  margin: 4px auto;
+  width: 100%;
+}
+
+.gold-bar-slot {
+  background: rgba(254, 243, 199, 0.78);
+  border: 2.5px dashed #d97706;
+  border-radius: 11px;
+  padding: 11px 15px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 0.88rem;
+  color: #78350f;
+  cursor: pointer;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+.gold-bar-slot.filled {
+  background: linear-gradient(180deg, #ffea8a 0%, #f5bd41 100%);
+  border: 2.5px solid #92400e;
+  color: #1e1204;
+  animation: popInCard 0.18s ease;
+}
+.gold-bar-slot.correct {
+  background: linear-gradient(180deg, #bbf7d0, #4ade80) !important;
+  border: 2.5px solid #15803d !important;
+  color: #064e3b !important;
+}
+.gold-bar-slot.wrong {
+  background: linear-gradient(180deg, #fecaca, #f87171) !important;
+  border: 2.5px solid #b91c1c !important;
+  color: #7f1d1d !important;
+}
+
+/* 4 KAD BERGAMBAR PELABUHAN (ZON 2 SOALAN 2a) */
+.port-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 4px 0;
+}
+
+.port-Picture-card {
+  background: #e6f2ff;
+  border: 3px solid #60a5fa;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.14);
+  cursor: pointer;
+}
+.port-Picture-card.correct {
+  border-color: #16a34a !important;
+  background: #dcfce7 !important;
+}
+.port-Picture-card.wrong {
+  border-color: #dc2626 !important;
+  background: #fee2e2 !important;
+}
+
+.port-svg-holder {
+  height: 105px;
+  width: 100%;
+  background: #bae6fd;
+}
+
+.port-label-slot {
+  padding: 9px 8px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 0.81rem;
+  color: #475569;
+  background: #fffbeb;
+  border-top: 2px dashed #94a3b8;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+}
+.port-label-slot.filled {
+  background: linear-gradient(180deg, #fef08a, #facc15);
+  color: #1e293b;
+  border-top: 2px solid #ca8a04;
+  animation: popInCard 0.18s ease;
+}
+
+/* TAB TERENGGANU & SELANGOR (ZON 3 SOALAN 3b) */
+.sultanate-tabs-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.sultanate-tab-btn {
+  flex: 1;
+  min-width: 180px;
+  min-height: 42px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-weight: 900;
+  font-size: 0.83rem;
+  cursor: pointer;
+  border: 2.5px solid #b4690e;
+  background: #dbeafe;
+  color: #1e3a8a;
+}
+.sultanate-tab-btn.active {
+  background: linear-gradient(180deg, #ffe47a 0%, #f59e0b 100%);
+  color: #2b1202;
+  border-color: #78350f;
+}
+
+.blue-bullet-panel {
+  background: linear-gradient(180deg, #d8ecff 0%, #b8dcff 100%);
+  border: 2.5px solid #60a5fa;
+  border-radius: 16px;
+  padding: 11px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.bullet-slot-item {
+  background: rgba(255, 255, 255, 0.82);
+  border: 2px dashed #3b82f6;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-weight: 700;
+  font-size: 0.84rem;
+  color: #475569;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.38;
+  min-height: 44px;
+}
+.bullet-slot-item.filled {
+  background: #ffffff;
+  border: 2px solid #1d4ed8;
+  color: #0f172a;
+  animation: popInCard 0.18s ease;
+}
+.bullet-slot-item.correct { background: #dcfce7 !important; border-color: #16a34a !important; }
+.bullet-slot-item.wrong { background: #fee2e2 !important; border-color: #dc2626 !important; }
+
+/* PETA SABAH X & Y (ZON 4 SOALAN 4a) */
+.sabah-split-layout {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 14px;
+  align-items: center;
+}
+
+.xy-slots-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.xy-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.xy-label {
+  font-weight: 900;
+  font-size: 0.95rem;
+  min-width: 54px;
+  color: #1e293b;
+}
+
+.xy-drop-box {
+  flex: 1;
+  min-width: 190px;
+  min-height: 46px;
+  background: #d8ecff;
+  border: 2.5px dashed #3b82f6;
+  border-radius: 10px;
+  padding: 9px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 800;
+  font-size: 0.87rem;
+  color: #475569;
+  cursor: pointer;
+}
+.xy-drop-box.filled {
+  background: linear-gradient(180deg, #ffea85, #f5b82e);
+  border: 2.5px solid #92400e;
+  color: #1e1305;
+  animation: popInCard 0.18s ease;
+}
+.xy-drop-box.correct { background: #dcfce7 !important; border-color: #16a34a !important; color: #065f46 !important; }
+.xy-drop-box.wrong { background: #fee2e2 !important; border-color: #dc2626 !important; color: #7f1d1d !important; }
+
+.sabah-map-box {
+  background: linear-gradient(180deg, #e0f2fe, #bae6fd);
+  border: 3px solid #38bdf8;
+  border-radius: 16px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* CARTA ALIR HIERARKI MELAKA (ZON 5 SOALAN 1a) */
+.melaka-flowchart-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin: 4px 0 8px;
+}
+
+.flow-box-slot {
+  flex: 1;
+  min-height: 54px;
+  border-radius: 12px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 800;
+  font-size: 0.82rem;
+  cursor: pointer;
+  border: 2.5px dashed #3b82f6;
+  background: #eff6ff;
+  color: #475569;
+}
+.flow-box-slot.first-slot.filled {
+  background: linear-gradient(180deg, #ffe270 0%, #f59e0b 100%);
+  border: 2.5px solid #92400e;
+  color: #1e1305;
+  animation: popInCard 0.18s ease;
+}
+.flow-box-slot.other-slot.filled {
+  background: linear-gradient(180deg, #dbeafe 0%, #93c5fd 100%);
+  border: 2.5px solid #1d4ed8;
+  color: #0f172a;
+  animation: popInCard 0.18s ease;
+}
+.flow-box-slot.correct { background: #dcfce7 !important; border-color: #16a34a !important; color: #065f46 !important; }
+.flow-box-slot.wrong { background: #fee2e2 !important; border-color: #dc2626 !important; color: #7f1d1d !important; }
+
+.flow-arrow {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #92400e;
+}
+
+/* CONNECTED PAIRS */
+.connected-pairs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.connected-pair-row {
+  display: grid;
+  grid-template-columns: 200px 26px 1fr;
+  align-items: center;
+}
+
+.left-dark-card {
+  background: linear-gradient(180deg, #1b3a6b 0%, #0d1f3d 100%);
+  border: 2.5px solid #f59e0b;
+  border-radius: 10px;
+  padding: 9px 11px;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.8rem;
+  line-height: 1.25;
+}
+
+.gold-connector-line {
+  height: 4px;
+  background: linear-gradient(90deg, #d97706, #fde047, #d97706);
+  position: relative;
+}
+.gold-connector-line::before,
+.gold-connector-line::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #fde047;
+  border: 2px solid #78350f;
+}
+.gold-connector-line::before { left: -3px; }
+.gold-connector-line::after { right: -3px; }
+
+.right-light-slot {
+  background: rgba(219, 234, 254, 0.72);
+  border: 2px dashed #3b82f6;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: #475569;
+  line-height: 1.38;
+  cursor: pointer;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+}
+.right-light-slot.filled {
+  background: #eff6ff;
+  border: 2px solid #1d4ed8;
+  color: #0f172a;
+  animation: popInCard 0.18s ease;
+}
+.right-light-slot.correct { background: #dcfce7 !important; border: 2px solid #16a34a !important; color: #064e3b !important; }
+.right-light-slot.wrong { background: #fee2e2 !important; border: 2px solid #dc2626 !important; color: #7f1d1d !important; }
+
+/* DEK KAD WARKAH DIRAJA */
+.card-deck-area {
+  margin-top: 8px;
+  background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+  border: 2.5px solid #d97706;
+  border-radius: 14px;
+  padding: 11px 14px;
+  box-shadow: inset 0 2px 8px rgba(180, 83, 9, 0.12);
+}
+
+.deck-title-bar {
+  font-size: 0.78rem;
+  font-weight: 900;
+  color: #78350f;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.deck-cards-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.selectable-card {
+  background: linear-gradient(180deg, #fff4bd 0%, #f7c952 100%);
+  border: 2px solid #b45309;
+  border-left: 6px solid #92400e;
+  border-radius: 10px;
+  padding: 9px 13px;
+  font-weight: 800;
+  font-size: 0.82rem;
+  color: #261203;
+  cursor: pointer;
+  box-shadow: 0 3px 7px rgba(0,0,0,0.15);
+  transition: transform 0.14s ease, opacity 0.14s ease;
+  text-align: left;
+  line-height: 1.38;
+  min-height: 42px;
+}
+.selectable-card:hover { transform: translateY(-2px); }
+.selectable-card:active { transform: scale(0.97); }
+.selectable-card.selected-active {
+  outline: 3px solid #1d4ed8;
+  background: linear-gradient(180deg, #dbeafe, #60a5fa);
+  color: #0f172a;
+}
+.selectable-card.used {
+  opacity: 0.28;
+  pointer-events: none;
+  filter: grayscale(0.7);
+}
+
+/* BUTANG SEMAK JAWAPAN BIRU BERKILAT */
+.bottom-action-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: -16px;
+  padding-bottom: calc(8px + var(--safe-bottom));
+  z-index: 30;
+  position: relative;
+}
+
+.semak-jawapan-btn {
+  background: linear-gradient(180deg, #38bdf8 0%, #2563eb 45%, #1e3a8a 100%);
+  border: 3px solid #bae6fd;
+  outline: 3px solid #0a1931;
+  border-radius: 32px;
+  padding: 11px 44px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 900;
+  font-size: 1.05rem;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.75);
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.6), inset 0 2px 6px rgba(255,255,255,0.65);
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+.semak-jawapan-btn:hover { transform: translateY(-2px) scale(1.03); filter: brightness(1.1); }
+.semak-jawapan-btn:active { transform: scale(0.97); }
+
+/* MAKLUM BALAS JAWAPAN */
+.feedback-banner {
+  display: none;
+  padding: 10px 14px;
+  border-radius: 11px;
+  font-weight: 800;
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+.feedback-banner.show { display: block; animation: popInCard 0.2s ease; }
+.feedback-banner.ok {
+  background: linear-gradient(180deg, #dcfce7, #bbf7d0);
+  border: 2px solid #16a34a;
+  color: #064e3b;
+}
+.feedback-banner.err {
+  background: linear-gradient(180deg, #fee2e2, #fecaca);
+  border: 2px solid #dc2626;
+  color: #7f1d1d;
+}
+
+/* MODAL SKEMA, ARTIFAK & WATIKAH DIRAJA */
+.modal-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 14, 31, 0.86);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+}
+.modal-backdrop.open { display: flex; }
+.modal-dialog {
+  background: linear-gradient(180deg, var(--parchment-top), var(--parchment-bot));
+  border: 4px solid #eab308;
+  outline: 3px solid #5c2d06;
+  border-radius: 22px;
+  max-width: 850px;
+  width: 100%;
+  max-height: 88dvh;
+  overflow-y: auto;
+  padding: 18px 20px;
+  color: #1e293b;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.85);
+}
+
+.artifact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+.artifact-card {
+  background: linear-gradient(180deg, #fffbeb, #fef3c7);
+  border: 2.5px solid #d97706;
+  border-radius: 16px;
+  padding: 14px;
+  text-align: center;
+}
+.artifact-card.locked {
+  filter: grayscale(1);
+  opacity: 0.55;
+}
+
+/* ================================================================= */
+/* MEDIA QUERIES KHAS UNTUK TABLET (641px - 1024px)                  */
+/* ================================================================= */
+@media (max-width: 1024px) {
+  .map-islands-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .zone-workspace {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .zone-left-sidebar {
+    position: static;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 10px;
+    background: rgba(10, 25, 49, 0.78);
+    border: 2px solid #fbbf24;
+    border-radius: 16px;
+    padding: 10px 12px;
+  }
+  .subq-pill-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    grid-column: 1 / -1;
+  }
+  .subq-pill-btn {
+    flex: 1;
+    min-width: 130px;
+    justify-content: center;
+    gap: 6px;
+  }
+  .subq-pill-btn.active { transform: translateY(-2px); }
+  .companion-dialogue-bubble {
+    margin-top: 0;
+  }
+  .companion-dialogue-bubble::after { display: none; }
+  .zone-character-box {
+    width: 90px;
+    margin-top: 0;
+  }
+  .zone-character-box svg { width: 78px; height: auto; }
+  .character-name-tag { font-size: 0.62rem; padding: 2px 7px; white-space: nowrap; }
+  .port-cards-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ================================================================= */
+/* MEDIA QUERIES KHAS UNTUK TELEFON PINTAR / PHONE (< 640px)         */
+/* ================================================================= */
+@media (max-width: 640px) {
+  .rpg-hud-bar {
+    padding: 5px 8px;
+    gap: 4px;
+    justify-content: center;
+  }
+  .hud-pill {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
+  .xp-bar-wrap { width: 48px; }
+  .hud-btn {
+    font-size: 0.7rem;
+    padding: 4px 9px;
+  }
+
+  /* Skrin Utama pada Phone: Susun Maskot & Papan Tajuk supaya tiada tindihan */
+  .title-center-stage {
+    padding: 20px 10px 6px;
+    justify-content: flex-start;
+  }
+  .royal-title-plaque {
+    padding: 24px 16px 22px;
+    border-width: 4px;
+    width: 96%;
+  }
+  .mula-game-btn {
+    padding: 12px 28px;
+    width: 92%;
+    justify-content: center;
+  }
+  .title-mascots-left {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    margin: 4px auto 0;
+    width: 210px;
+  }
+
+  /* Peta Pengembaraan pada Phone: 1 Lajur Kemas & Mudah Skrol */
+  .map-islands-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 8px 14px 32px;
+  }
+  .island-art-wrap { height: 112px; }
+  .island-label-plaque { max-width: 320px; }
+
+  /* Skrin Zon pada Phone */
+  .screen-top-nav {
+    padding: 6px 8px 2px;
+    gap: 6px;
+  }
+  .top-wooden-header {
+    padding: 6px 14px;
+    width: 100%;
+  }
+  .zone-left-sidebar {
+    grid-template-columns: 1fr 70px;
+    padding: 8px;
+  }
+  .subq-pill-btn {
+    min-width: 95px;
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
+  .parchment-frame {
+    padding: 12px 12px 24px;
+    border-width: 3.5px;
+    border-radius: 16px;
+  }
+  .port-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .port-svg-holder { height: 86px; }
+  .sabah-split-layout { grid-template-columns: 1fr; }
+
+  /* Carta Alir Melaka Menegak pada Phone supaya mudah disentuh jari */
+  .melaka-flowchart-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .flow-box-slot { min-height: 46px; width: 100%; }
+  .flow-arrow {
+    transform: rotate(90deg);
+    text-align: center;
+    margin: -2px 0;
+  }
+
+  /* Pasangan Kad Berhubung Menegak pada Phone */
+  .connected-pair-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+    background: rgba(255,255,255,0.55);
+    border-radius: 11px;
+    padding: 4px;
+    border: 1px solid rgba(217, 119, 6, 0.35);
+  }
+  .left-dark-card {
+    border-radius: 8px 8px 0 0;
+    font-size: 0.78rem;
+    padding: 7px 10px;
+  }
+  .gold-connector-line { display: none; }
+  .right-light-slot {
+    border-radius: 0 0 8px 8px;
+    font-size: 0.81rem;
+  }
+
+  .selectable-card {
+    width: 100%;
+    font-size: 0.81rem;
+    padding: 10px 12px;
+  }
+
+  /* Butang Semak Jawapan Melekat di Bawah Skrin Phone */
+  .bottom-action-bar {
+    position: sticky;
+    bottom: 6px;
+    margin-top: 6px;
+  }
+  .semak-jawapan-btn {
+    width: 92%;
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- KANVAS ZARAH KUNANG-KUNANG EMAS & KONFETI KEMENANGAN -->
+<canvas id="fx-canvas"></canvas>
+
+<!-- ================================================================= -->
+<!-- BAR STATUS DIRAJA (RPG HUD & PENGAWAL AUDIO NUSANTARA)            -->
+<!-- ================================================================= -->
+<header class="rpg-hud-bar">
+  <div class="hud-left-group">
+    <button class="hud-btn" onclick="cycleMusicTrack()" id="btn-bgm" title="Tukar Lagu Latar Gamelan & Seruling">
+      🎵 Lagu: Balairung Melaka
+    </button>
+    <button class="hud-btn blue" onclick="toggleSfx()" id="btn-sfx" title="Kesan Bunyi Permainan">
+      🔊 Bunyi: ON
+    </button>
+    <div class="hud-pill" title="Gelaran Pangkat Pengembara Sejarah">
+      👑 <span id="hud-rank">Perantau Muda</span>
+    </div>
+    <div class="hud-pill" title="Mata Pengalaman (XP)">
+      ⭐ <span id="hud-xp">0 XP</span>
+      <div class="xp-bar-wrap"><div class="xp-bar-fill" id="hud-xp-fill"></div></div>
+    </div>
+  </div>
+
+  <div class="hud-right-group">
+    <div class="hud-pill" title="Syiling Emas Kupang (Untuk Kuasa Bantuan)">
+      🪙 <span id="hud-coins">60</span> Kupang
+    </div>
+    <div class="hud-pill" title="Kombo Jawapan Tepat Berturut-turut">
+      🔥 <span id="hud-streak">0</span>x
+    </div>
+    <button class="hud-btn" onclick="openArtifactsModal()">
+      🏺 Artifak (<span id="hud-artifacts">0/6</span>)
+    </button>
+    <button class="hud-btn purple" onclick="openWatikahModal()">
+      🎖️ Watikah
+    </button>
+    <button class="hud-btn blue" onclick="openFullSchemaModal()">
+      📜 Skema
+    </button>
+  </div>
+</header>
+
+<!-- ================================================================= -->
+<!-- SKRIN 1: PEMBUKAAN (MISI SEJARAH: LEGENDA ALAM MELAYU)            -->
+<!-- ================================================================= -->
+<section id="screen-title" class="screen active">
+  <svg class="scene-bg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0f2952"/>
+        <stop offset="38%" stop-color="#1d63b8"/>
+        <stop offset="72%" stop-color="#f59e0b"/>
+        <stop offset="100%" stop-color="#fef08a"/>
+      </linearGradient>
+      <linearGradient id="seaGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0284c7"/>
+        <stop offset="45%" stop-color="#0369a1"/>
+        <stop offset="100%" stop-color="#06162e"/>
+      </linearGradient>
+      <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#fffbeb" stop-opacity="0.95"/>
+        <stop offset="45%" stop-color="#fde047" stop-opacity="0.5"/>
+        <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <rect width="1440" height="900" fill="url(#skyGrad)"/>
+    <circle cx="720" cy="460" r="290" fill="url(#sunGlow)"/>
+    <path d="M0,560 L150,310 L310,480 L490,340 L670,560 Z" fill="#1e3a5f" opacity="0.65"/>
+    <path d="M820,560 L1020,290 L1190,440 L1350,250 L1440,560 Z" fill="#1e3a5f" opacity="0.65"/>
+    <rect x="0" y="550" width="1440" height="350" fill="url(#seaGrad)"/>
+    <ellipse cx="720" cy="590" rx="220" ry="12" fill="#fde047" opacity="0.45"/>
+    <ellipse cx="720" cy="625" rx="160" ry="8" fill="#fde047" opacity="0.35"/>
+    <path d="M960,590 L1440,590 L1440,420 L1240,380 L1070,450 Z" fill="#166534"/>
+    <g transform="translate(1140, 305)">
+      <rect x="25" y="85" width="170" height="100" fill="#78350f" stroke="#fbbf24" stroke-width="3.5"/>
+      <polygon points="5,85 110,18 215,85" fill="#b45309" stroke="#fde047" stroke-width="3.5"/>
+      <polygon points="40,45 110,-12 180,45" fill="#d97706" stroke="#fef08a" stroke-width="3"/>
+      <circle cx="110" cy="-18" r="8" fill="#fef08a"/>
+    </g>
+    <g class="anim-ship" transform="translate(895, 430)">
+      <path d="M20,125 L195,125 L225,80 L0,80 Z" fill="#78350f" stroke="#fbbf24" stroke-width="3.5"/>
+      <line x1="108" y1="0" x2="108" y2="82" stroke="#451a03" stroke-width="5"/>
+      <path d="M50,12 Q115,35 95,75 L42,75 Z" fill="#fffbeb" stroke="#d97706" stroke-width="2.5"/>
+      <path d="M114,6 Q180,28 160,75 L114,75 Z" fill="#fde68a" stroke="#d97706" stroke-width="2.5"/>
+      <polygon points="108,0 148,10 108,20" fill="#dc2626"/>
+    </g>
+  </svg>
+
+  <div class="title-center-stage">
+    <div class="royal-title-plaque">
+      <div class="kerawang-corner tl"></div>
+      <div class="kerawang-corner tr"></div>
+      <div class="kerawang-corner bl"></div>
+      <div class="kerawang-corner br"></div>
+      <div class="royal-crest-top">⚜</div>
+
+      <div class="main-logo-title">MISI SEJARAH</div>
+      <div class="sub-logo-title">✦ LEGENDA ALAM MELAYU ✦</div>
+      <div class="blue-ribbon-banner">MODUL PEPERIKSAAN SEJARAH<br>BAHAGIAN B &amp; C</div>
+
+      <div class="feature-badges-row">
+        <span class="feat-mini-badge">📱 Mesra Phone, Tablet &amp; Web</span>
+        <span class="feat-mini-badge">🎵 4 Lagu Gamelan &amp; Seruling</span>
+        <span class="feat-mini-badge">🖍️ Sorotan Kata Kunci</span>
+        <span class="feat-mini-badge">🏺 6 Artifak &amp; Watikah Diraja</span>
+      </div>
+
+      <div>
+        <button class="mula-game-btn" onclick="startAdventureGame()">
+          MULA GAME <span>➔</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Watak Maskot Pahlawan & Puteri Cilik -->
+  <div class="title-mascots-left">
+    <svg viewBox="0 0 380 340" width="100%">
+      <g transform="translate(15, 25)">
+        <path d="M35,85 L25,28 L75,45 L115,18 L145,48 L135,85 Z" fill="#1c1917" stroke="#fbbf24" stroke-width="4"/>
+        <path d="M40,75 Q90,55 135,75" fill="none" stroke="#fde047" stroke-width="5"/>
+        <circle cx="90" cy="52" r="10" fill="#fbbf24" stroke="#fff" stroke-width="2"/>
+        <circle cx="88" cy="122" r="46" fill="#fed7aa" stroke="#7c2d12" stroke-width="3"/>
+        <circle cx="72" cy="120" r="6.5" fill="#1c1917"/>
+        <circle cx="106" cy="120" r="6.5" fill="#1c1917"/>
+        <circle cx="70" cy="118" r="2" fill="#fff"/>
+        <circle cx="104" cy="118" r="2" fill="#fff"/>
+        <path d="M74,140 Q90,154 104,140" fill="none" stroke="#7c2d12" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M42,168 L134,168 L146,275 L30,275 Z" fill="#1c1917" stroke="#fbbf24" stroke-width="3.5"/>
+        <path d="M55,215 L122,215 L126,265 L50,265 Z" fill="#d97706" stroke="#fde047" stroke-width="2.5"/>
+      </g>
+      <g transform="translate(175, 45)">
+        <path d="M35,82 L48,25 L90,5 L132,25 L145,82 Z" fill="#dc2626" stroke="#fde047" stroke-width="4"/>
+        <circle cx="90" cy="42" r="11" fill="#fde047" stroke="#fff" stroke-width="2"/>
+        <circle cx="90" cy="118" r="44" fill="#fed7aa" stroke="#7c2d12" stroke-width="3"/>
+        <circle cx="74" cy="116" r="6" fill="#1c1917"/>
+        <circle cx="106" cy="116" r="6" fill="#1c1917"/>
+        <circle cx="72" cy="114" r="2" fill="#fff"/>
+        <circle cx="104" cy="114" r="2" fill="#fff"/>
+        <path d="M77,135 Q90,148 103,135" fill="none" stroke="#991b1b" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M46,162 L134,162 L144,265 L36,265 Z" fill="#b45309" stroke="#fde047" stroke-width="3.5"/>
+        <path d="M132,175 L178,152" stroke="#fed7aa" stroke-width="14" stroke-linecap="round"/>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- SKRIN 2: PETA PENGEMBARAAN (6 PULAU ZON)                          -->
+<!-- ================================================================= -->
+<section id="screen-map" class="screen">
+  <svg class="scene-bg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <radialGradient id="oceanMap" cx="50%" cy="50%" r="65%">
+        <stop offset="0%" stop-color="#06b6d4"/>
+        <stop offset="52%" stop-color="#0284c7"/>
+        <stop offset="100%" stop-color="#071936"/>
+      </radialGradient>
+    </defs>
+    <rect width="1440" height="900" fill="url(#oceanMap)"/>
+    <circle cx="1310" cy="130" r="68" fill="none" stroke="#fde047" stroke-width="2" opacity="0.35"/>
+    <polygon points="1310,68 1322,118 1372,130 1322,142 1310,192 1298,142 1248,130 1298,118" fill="#fde047" opacity="0.3"/>
+    <path d="M260,260 Q480,190 720,250 T1150,260 T980,580 T560,600 T260,580" fill="none" stroke="#fef08a" stroke-width="5" stroke-dasharray="14 10" opacity="0.7"/>
+  </svg>
+
+  <div class="screen-top-nav">
+    <button class="hud-btn" onclick="showScreen('screen-title')" style="padding:8px 16px;font-size:0.82rem;">⬅ Skrin Utama</button>
+    <div class="top-wooden-header">
+      <h1>PETA PENGEMBARAAN</h1>
+      <p>PILIH ZON UNTUK BELAJAR &amp; BERMAIN — KUMPUL 18 BINTANG &amp; 6 ARTIFAK DIRAJA!</p>
+    </div>
+  </div>
+
+  <div class="map-islands-grid" id="map-islands-container"></div>
+</section>
+
+<!-- ================================================================= -->
+<!-- SKRIN 3: PAPAN PERMAINAN ZON                                      -->
+<!-- ================================================================= -->
+<section id="screen-zone" class="screen">
+  <div id="dynamic-zone-bg" class="scene-bg"></div>
+
+  <div class="screen-top-nav">
+    <button class="hud-btn" onclick="showScreen('screen-map')" style="padding:8px 16px;font-size:0.82rem;">⬅ Peta Pengembaraan</button>
+    <div class="top-wooden-header">
+      <h1 id="zone-banner-title">ZON 1 : PETA ALAM MELAYU</h1>
+      <p id="zone-banner-sub">BAHAGIAN B - SOALAN 1</p>
+    </div>
+  </div>
+
+  <div class="zone-workspace">
+    <!-- KIRI / ATAS (PADA PHONE & TABLET): PILIHAN SUBSOALAN, DIALOG & WATAK -->
+    <div class="zone-left-sidebar">
+      <div class="subq-pill-list" id="subq-buttons-container"></div>
+      <div class="companion-dialogue-bubble" id="companion-bubble">
+        "Selamat datang Pahlawan! Sentuh mana-mana slot kosong atau kad warkah di bawah untuk memadankan jawapan."
+      </div>
+      <div class="zone-character-box anim-avatar" id="zone-character-svg"></div>
+    </div>
+
+    <!-- KANAN / BAWAH: PAPAN MANUSKRIP SOALAN BERBINGKAI EMAS -->
+    <div class="parchment-board-outer">
+      <div class="parchment-frame" id="parchment-board-content"></div>
+      <div class="bottom-action-bar">
+        <button class="semak-jawapan-btn" onclick="checkCurrentSubQuestion()">⚔️ Semak Jawapan</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL SKEMA JAWAPAN ASAL, ARTIFAK & WATIKAH DIRAJA -->
+<div class="modal-backdrop" id="schema-modal">
+  <div class="modal-dialog">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #d97706;padding-bottom:10px;margin-bottom:14px;gap:8px;">
+      <h2 style="font-family:'Cinzel',serif;color:#78350f;font-size:clamp(0.95rem,2vw,1.2rem);" id="modal-title">SKEMA JAWAPAN ASAL</h2>
+      <button class="mini-tool-btn" onclick="closeSchemaModal()" style="font-size:0.84rem;padding:6px 14px;">✕ Tutup</button>
+    </div>
+    <div id="modal-body" style="display:flex;flex-direction:column;gap:12px;font-size:0.89rem;line-height:1.5;"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================================
+// 1. ENJIN MUZIK NUSANTARA (GAMELAN BONANG + SERULING BAMBU + GONG + GENDANG)
+// ============================================================================
+let audioCtx = null;
+let sfxEnabled = true;
+let currentTrackIndex = 0;
+let bgmTimer = null;
+let bgmStep = 0;
+
+const BGM_TRACKS = [
+  {
+    name: "Balairung Melaka",
+    tempo: 330,
+    melody: [523.25, 659.25, 587.33, 783.99, 880.00, 783.99, 659.25, 587.33, 523.25, 587.33, 659.25, 523.25, 392.00, 440.00, 523.25, 523.25],
+    flute:  [0,      0,      1174.66,1567.98,1760.00,0,      1318.51,0,      1046.50,0,      1318.51,1046.50,0,      880.00, 1046.50,0],
+    bass:   [130.81, 0,      196.00, 0,      146.83, 0,      196.00, 0,      130.81, 0,      196.00, 0,      130.81, 196.00, 130.81, 0]
+  },
+  {
+    name: "Layar Samudera",
+    tempo: 285,
+    melody: [587.33, 783.99, 880.00, 1046.50, 880.00, 783.99, 659.25, 783.99, 587.33, 659.25, 783.99, 587.33, 440.00, 523.25, 587.33, 587.33],
+    flute:  [1174.66,0,      1760.00,0,       1760.00,1567.98,1318.51,0,      1174.66,0,      1567.98,0,      880.00, 1046.50,1174.66,0],
+    bass:   [146.83, 220.00, 146.83, 0,       196.00, 293.66, 196.00, 0,      146.83, 220.00, 130.81, 196.00, 146.83, 0,      146.83, 0]
+  },
+  {
+    name: "Gendang Pahlawan",
+    tempo: 235,
+    melody: [659.25, 659.25, 783.99, 880.00, 987.77, 880.00, 783.99, 659.25, 523.25, 659.25, 783.99, 659.25, 493.88, 587.33, 659.25, 659.25],
+    flute:  [1318.51,0,      1567.98,1760.00,1975.53,0,      1567.98,1318.51,1046.50,0,      1567.98,0,      987.77, 1174.66,1318.51,0],
+    bass:   [164.81, 164.81, 0,      196.00, 220.00, 0,      164.81, 0,      130.81, 130.81, 196.00, 0,      123.47, 146.83, 164.81, 0]
+  },
+  {
+    name: "Bayu Kepulauan",
+    tempo: 410,
+    melody: [440.00, 523.25, 659.25, 783.99, 659.25, 523.25, 440.00, 392.00, 440.00, 523.25, 587.33, 523.25, 440.00, 392.00, 329.63, 440.00],
+    flute:  [880.00, 1046.50,1318.51,0,      1318.51,1046.50,880.00, 0,      880.00, 1046.50,1174.66,0,      880.00, 0,      659.25, 880.00],
+    bass:   [110.00, 0,      164.81, 0,      130.81, 0,      110.00, 0,      110.00, 0,      146.83, 0,      110.00, 0,      110.00, 0]
+  },
+  {
+    name: "Senyap (OFF)",
+    tempo: 0,
+    melody: [],
+    flute: [],
+    bass: []
+  }
+];
+
+function ensureAudioCtx() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+}
+
+function playBonangNote(freq, duration = 0.34, vol = 0.04) {
+  if (!audioCtx || !freq) return;
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const overtone = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(freq, now);
+  overtone.type = "triangle";
+  overtone.frequency.setValueAtTime(freq * 2.41, now);
+
+  gain.gain.setValueAtTime(vol, now);
+  gain.gain.exponentialRampToValueAtTime(0.0008, now + duration);
+
+  osc.connect(gain);
+  overtone.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.start(now);
+  overtone.start(now);
+  osc.stop(now + duration);
+  overtone.stop(now + duration);
+}
+
+function playSerulingNote(freq, duration = 0.45, vol = 0.024) {
+  if (!audioCtx || !freq) return;
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(freq * 0.99, now);
+  osc.frequency.exponentialRampToValueAtTime(freq, now + 0.08);
+
+  gain.gain.setValueAtTime(0.001, now);
+  gain.gain.linearRampToValueAtTime(vol, now + 0.07);
+  gain.gain.exponentialRampToValueAtTime(0.0008, now + duration);
+
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start(now);
+  osc.stop(now + duration);
+}
+
+function playGongBass(freq, duration = 0.58) {
+  if (!audioCtx || !freq) return;
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(freq, now);
+  gain.gain.setValueAtTime(0.06, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start(now);
+  osc.stop(now + duration);
+}
+
+function startBgmLoop() {
+  stopBgmLoop();
+  const track = BGM_TRACKS[currentTrackIndex];
+  if (!track || track.tempo === 0) return;
+
+  bgmTimer = setInterval(() => {
+    if (!audioCtx || audioCtx.state !== "running") return;
+    const idx = bgmStep % track.melody.length;
+    if (track.melody[idx]) playBonangNote(track.melody[idx], 0.36, 0.038);
+    if (track.flute && track.flute[idx]) playSerulingNote(track.flute[idx], 0.42, 0.022);
+    if (track.bass[idx]) playGongBass(track.bass[idx], 0.52);
+    bgmStep++;
+  }, track.tempo);
+}
+
+function stopBgmLoop() {
+  if (bgmTimer) {
+    clearInterval(bgmTimer);
+    bgmTimer = null;
+  }
+}
+
+function cycleMusicTrack() {
+  ensureAudioCtx();
+  currentTrackIndex = (currentTrackIndex + 1) % BGM_TRACKS.length;
+  const track = BGM_TRACKS[currentTrackIndex];
+  document.getElementById("btn-bgm").innerHTML = track.tempo === 0
+    ? `🔇 Lagu: OFF`
+    : `🎵 Lagu: ${track.name}`;
+  startBgmLoop();
+}
+
+function toggleSfx() {
+  sfxEnabled = !sfxEnabled;
+  document.getElementById("btn-sfx").innerHTML = sfxEnabled
+    ? `🔊 Bunyi: ON`
+    : `🔇 Bunyi: OFF`;
+}
+
+function playSfxClick() {
+  if (!sfxEnabled) return;
+  ensureAudioCtx();
+  playBonangNote(680, 0.09, 0.065);
+}
+
+function playSfxCoin() {
+  if (!sfxEnabled) return;
+  ensureAudioCtx();
+  playBonangNote(987.77, 0.12, 0.08);
+  setTimeout(() => playBonangNote(1318.51, 0.25, 0.09), 85);
+}
+
+function playSfxVictory() {
+  if (!sfxEnabled) return;
+  ensureAudioCtx();
+  const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+  notes.forEach((n, i) => {
+    setTimeout(() => playBonangNote(n, 0.38, 0.095), i * 100);
+  });
+}
+
+function playSfxError() {
+  if (!sfxEnabled) return;
+  ensureAudioCtx();
+  playGongBass(108, 0.36);
+}
+
+function speakCurrentQuestion() {
+  playSfxClick();
+  if (!('speechSynthesis' in window)) {
+    setCompanionSpeech("Pelayar anda tidak menyokong fungsi bacaan suara.");
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const zone = ZONES_DATA.find(z => z.id === currentZoneId);
+  const sq = zone.subQuestions.find(s => s.key === currentSubKey);
+  const textToRead = `${sq.qTitle}. ${sq.stimulus ? sq.stimulus : ''} ${sq.prompt}`;
+  const utter = new SpeechSynthesisUtterance(textToRead);
+  utter.lang = "ms-MY";
+  utter.rate = 0.96;
+  window.speechSynthesis.speak(utter);
+  setCompanionSpeech("Dengarkan bacaan soalan dengan teliti, kemudian padankan warkah jawapan di bawah!");
+}
+
+// ============================================================================
+// 2. PANGKALAN DATA 100% AYAT ASAL & 6 ARTIFAK WARISAN
+// ============================================================================
+const ARTIFACTS_INFO = [
+  { zoneId: 1, icon: "🗺️", name: "Peta Kuno Nusantara", desc: "Anugerah penguasaan Peta & Konsep Alam Melayu." },
+  { zoneId: 2, icon: "🧭", name: "Kompas Pelayaran Emas", desc: "Anugerah penguasaan Pelabuhan & Pedagang Luar." },
+  { zoneId: 3, icon: "🗡️", name: "Cura Manja Kini", desc: "Anugerah penguasaan Warisan Kesultanan Melayu." },
+  { zoneId: 4, icon: "🛡️", name: "Mohor Pemerintahan Sabah", desc: "Anugerah penguasaan Pemerintahan Tempatan Sabah." },
+  { zoneId: 5, icon: "👑", name: "Tengkolok Balairung Seri", desc: "Anugerah penguasaan Pentadbiran Kesultanan Melaka." },
+  { zoneId: 6, icon: "📜", name: "Warkah Diplomasi Diraja", desc: "Anugerah penguasaan Hubungan Diplomatik & Perdagangan." }
+];
+
+const HISTORICAL_KEYWORDS = [
+  "Abdul Hadi Haji Hassan", "Profesor Dr. Ding Choo Ming", "Ismail Hussein", "Nik Hassan Shuhaimi",
+  "Malaysia", "Selatan Thailand", "Filipina", "Indonesia", "Singapura", "Selatan Myanmar", "Brunei", "Selatan Indochina",
+  "bahasa Melayu", "etnik peribumi", "Empat / Papat / Ampat / Apat", "gangsa", "seni mempertahankan diri", "gotong-royong",
+  "Bekalan air", "Tempat tinggal", "Tempat menyimpan barang dagangan", "Kawasan berjual beli",
+  "China, India, Arab, dan Parsi", "sutera, tembikar, pinggan mangkuk, payung, dan gula gendang", "perubatan",
+  "kain kapas, tembikar, dan batu berharga", "akik dan karnelian", "rempah, gaharu, serta kapur barus",
+  "minyak wangi, barangan kaca, dan manik", "Tanah Arab dan Rom",
+  "pertumbuhan ekonomi", "pasaran ekonomi", "peluang pekerjaan", "pelaburan", "kerjasama antarabangsa",
+  "Kesultanan Pahang", "Kesultanan Perak", "Kesultanan Johor Riau", "Bendahara Johor Riau",
+  "Sultan Abdul Jalil", "Tun Zainal Abidin", "Sultan Zainal Abidin I", "Tanjung Baru, Kuala Berang",
+  "keluarga diraja Bugis", "Raja Lumu", "Daeng Chelak", "Sultan Mahmud Shah", "nobat dan cap mohor",
+  "Sultan Salehuddin Shah", "Kuala Selangor", "Sultan Mansur Shah", "Raja Muhammad", "Sultan Muhammad Shah",
+  "Raja Muzaffar", "Cura Manja Kini", "Surat Ciri",
+  "Wakil Raja Brunei", "Wakil Brunei", "Wakil Raja Sulu", "Wakil Sulu",
+  "Sistem Pembesar Empat Lipatan", "Sultan", "Pembesar Berempat", "Pembesar Berlapan", "Pembesar Enam Belas", "Pembesar Tiga Puluh Dua",
+  "sistem serah", "sistem kerah", "Orang Kaya Berempat", "Bendahara", "Penghulu Bendahari", "Temenggung", "Laksamana",
+  "kestabilan politik", "keamanan negara", "kemakmuran ekonomi", "keadilan sosial", "keharmonian hidup", "kedaulatan negara",
+  "Keserumpunan", "Geografi", "Agama", "Hubungan Pengiktirafan", "Kerjasama Pertahanan", "Ikatan Perkahwinan Diraja",
+  "Long Yunus", "Che' Ku Wan", "Tengku Muhammad",
+  "Lembah Bujang", "Pangkalan Galoh", "Pelabuhan Kuala Perlis", "Sungai Linggi",
+  "bijih timah, emas, kayu gaharu, kapur barus, dan beras", "ekonomi monetari", "mata wang tempatan", "cukai kastam"
+];
+
+function applyKeywordHighlight(text) {
+  if (!highlightKeywordsOn) return text;
+  let result = text;
+  HISTORICAL_KEYWORDS.forEach(kw => {
+    const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const reg = new RegExp(`(${escaped})`, "g");
+    result = result.replace(reg, `<mark class="kw-hl">$1</mark>`);
+  });
+  return result;
+}
+
+const ZONES_DATA = [
+  {
+    id: 1,
+    zoneTag: "ZON 1",
+    shortName: "PETA ALAM MELAYU",
+    sectionLabel: "Bahagian B",
+    questionLabel: "Soalan 1",
+    bannerTitle: "ZON 1 : PETA ALAM MELAYU",
+    bannerSub: "BAHAGIAN B - SOALAN 1",
+    characterName: "Tokoh Cendekiawan",
+    avatarColor: "#eab308",
+    subQuestions: [
+      {
+        key: "a",
+        btnLabel: "(a) Soalan 1(a)",
+        qTitle: "SOALAN 1 (a)",
+        marks: "[2 markah]",
+        stimulus: "Peta berikut berkaitan dengan aspek geografi Alam Melayu yang merangkumi gugusan kepulauan dan tanah besar bahagian tenggara benua Asia.",
+        prompt: "Namakan dua tokoh tempatan yang mengemukakan pandangan tentang konsep Alam Melayu berdasarkan peta tersebut.",
+        schemaNote: "JAWAPAN: (PILIH MANA-MANA DUA TOKOH)",
+        layoutType: "multi-select-bars",
+        slotPlaceholders: [
+          "Slot Tokoh Tempatan 1 (Kosong — Sentuh untuk pilih)",
+          "Slot Tokoh Tempatan 2 (Kosong — Sentuh untuk pilih)",
+          "Slot Tokoh Tempatan 3 (Kosong — Sentuh untuk pilih)",
+          "Slot Tokoh Tempatan 4 (Kosong — Sentuh untuk pilih)"
+        ],
+        cards: [
+          "Abdul Hadi Haji Hassan",
+          "Profesor Dr. Ding Choo Ming",
+          "Profesor Emeritus Tan Sri Dato' Pendeta (Dr.) Ismail Hussein",
+          "Profesor Emeritus Dato' Dr. Nik Hassan Shuhaimi Nik Abdul Rahman"
+        ],
+        distractors: [
+          "Sultan Muhammad Shah",
+          "Sultan Muzaffar Shah",
+          "Tun Zainal Abidin",
+          "Raja Lumu (putera Daeng Chelak)"
+        ]
+      },
+      {
+        key: "b",
+        btnLabel: "(b) Soalan 1(b)",
+        qTitle: "SOALAN 1 (b)",
+        marks: "[4 markah]",
+        stimulus: "SOALAN 1 (Peta & Lingkungan Alam Melayu)",
+        prompt: "Apakah kawasan yang merangkumi lingkungan Alam Melayu pada hari ini?",
+        schemaNote: "JAWAPAN:",
+        layoutType: "multi-select-bars",
+        slotPlaceholders: [
+          "Slot Kawasan Alam Melayu 1 (Kosong)",
+          "Slot Kawasan Alam Melayu 2 (Kosong)",
+          "Slot Kawasan Alam Melayu 3 (Kosong)",
+          "Slot Kawasan Alam Melayu 4 (Kosong)",
+          "Slot Kawasan Alam Melayu 5 (Kosong)",
+          "Slot Kawasan Alam Melayu 6 (Kosong)",
+          "Slot Kawasan Alam Melayu 7 (Kosong)",
+          "Slot Kawasan Alam Melayu 8 (Kosong)"
+        ],
+        cards: [
+          "Malaysia",
+          "Selatan Thailand",
+          "Filipina",
+          "Indonesia",
+          "Singapura",
+          "Selatan Myanmar",
+          "Brunei",
+          "Selatan Indochina"
+        ],
+        distractors: [
+          "Oc Eo",
+          "Palembang",
+          "Yasodharapura",
+          "Tanjung Baru, Kuala Berang",
+          "Kuala Selangor"
+        ]
+      },
+      {
+        key: "c",
+        btnLabel: "(c) Soalan 1(c)",
+        qTitle: "SOALAN 1 (c)",
+        marks: "[4 markah]",
+        stimulus: "SOALAN 1 ( ) (Peta & Lingkungan Alam Melayu)",
+        prompt: "Ikatan keserumpunan bahasa dan budaya masih kuat dalam kalangan penduduk di Alam Melayu walaupun penduduk Alam Melayu terbahagi kepada beberapa buah negara. Beri ulasan anda.",
+        schemaNote: "JAWAPAN: (MANA-MANA 4 JAWAPAN)",
+        layoutType: "connected-pairs",
+        leftLabels: [
+          "Ikatan Asas Keserumpunan",
+          "Kaitan Bahasa Melayu",
+          "Bahasa Etnik Peribumi",
+          "Persamaan Bunyi Sebutan",
+          "Aspek Budaya Serumpun",
+          "Bidang Kesenian",
+          "Amalan Nilai Masyarakat"
+        ],
+        cards: [
+          "Mempunyai ikatan keserumpunan bahasa dan budaya Alam Melayu.",
+          "Bahasa serumpun penduduk Alam Melayu dikaitkan dengan bahasa Melayu.",
+          "Mempunyai perkaitan dengan bahasa etnik peribumi.",
+          "Wujud persamaan bahasa melalui kata atau mempunyai persamaan bunyi sebutan. Contohnya perkataan-perkataan seperti Empat / Papat / Ampat / Apat.",
+          "Keserumpunan merangkumi bahasa dan tulisan, persuratan, struktur sosial, kesenian, kepercayaan, dan adat.",
+          "Berkembang sejajar dengan kepandaian dalam bidang kesenian seperti pembuatan gangsa dan seni mempertahankan diri.",
+          "Nilai-nilai serumpun wujud dalam masyarakat Alam Melayu seperti amalan gotong-royong."
+        ]
+      }
+    ]
+  },
+  {
+    id: 2,
+    zoneTag: "ZON 2",
+    shortName: "PELABUHAN EMAS",
+    sectionLabel: "Bahagian B",
+    questionLabel: "Soalan 2",
+    bannerTitle: "ZON 2 : PELABUHAN EMAS",
+    bannerSub: "BAHAGIAN B - SOALAN 2",
+    characterName: "Syahbandar Pelabuhan",
+    avatarColor: "#b45309",
+    subQuestions: [
+      {
+        key: "a",
+        btnLabel: "(a) Soalan 2(a)",
+        qTitle: "SOALAN 2 (a)",
+        marks: "[2 markah]",
+        stimulus: "Jadual berikut berkaitan dengan pelabuhan perdagangan kerajaan Alam Melayu: • Funan | Oc Eo • Champa | Turan, Kam ran, Sri Banoy dan Maliti • Srivijaya | Palembang • Angkor | Yasodharapura • Majapahit | Tuban, Sidayu, Gresik dan Surabaya. Pedagang Luar: China, India, Arab, Parsi.",
+        prompt: "Apakah kemudahan yang disediakan di pelabuhan tersebut?",
+        schemaNote: "JAWAPAN:",
+        layoutType: "port-4-cards",
+        cards: [
+          "Bekalan air",
+          "Tempat tinggal",
+          "Tempat menyimpan barang dagangan",
+          "Kawasan berjual beli"
+        ],
+        distractors: [
+          "Tembikar, minyak wangi, barangan kaca, dan manik",
+          "Kain kapas, tembikar, dan batu berharga",
+          "Rempah, gaharu, serta kapur barus",
+          "Sutera, tembikar, pinggan mangkuk, payung, dan gula gendang"
+        ]
+      },
+      {
+        key: "b",
+        btnLabel: "(b) Soalan 2(b)",
+        qTitle: "SOALAN 2 (b)",
+        marks: "[4 markah]",
+        stimulus: "Pedagang Luar: China, India, Arab, Parsi.",
+        prompt: "Jelaskan kegiatan pedagang luar yang berdagang dengan Alam Melayu.",
+        schemaNote: "JAWAPAN:",
+        layoutType: "connected-pairs",
+        leftLabels: [
+          "Pedagang Luar Utama",
+          "Tujuan Barang Dagangan",
+          "Kegiatan Pedagang China",
+          "Jualan Pedagang India",
+          "Belian Pedagang India",
+          "Jualan Arab dan Parsi",
+          "Belian Arab dan Parsi"
+        ],
+        cards: [
+          "Pedagang luar yang sering berdagang dengan Alam Melayu terdiri daripada pedagang China, India, Arab, dan Parsi.",
+          "Pedagang membawa pelbagai barang dagangan untuk dijual atau ditukar dengan barangan daripada Alam Melayu.",
+          "Pedagang China membawa sutera, tembikar, pinggan mangkuk, payung, dan gula gendang serta mendapatkan barangan yang bernilai perubatan dari Alam Melayu.",
+          "Pedagang India membawa kain kapas, tembikar, dan batu berharga (seperti akik dan karnelian) untuk dijual kepada penduduk tempatan.",
+          "Pedagang India juga membeli kain sutera dari China dan barang Alam Melayu seperti rempah, gaharu, serta kapur barus.",
+          "Pedagang Arab dan Parsi membawa tembikar, minyak wangi, barangan kaca, dan manik.",
+          "Pedagang Arab dan Parsi membeli rempah serta kayu wangi untuk didagangkan semula ke Tanah Arab dan Rom."
+        ]
+      },
+      {
+        key: "c",
+        btnLabel: "(c) Soalan 2(c)",
+        qTitle: "SOALAN 2 (c)",
+        marks: "[4 markah]",
+        stimulus: "",
+        prompt: "Kewujudan banyak pelabuhan membuktikan perdagangan merupakan kegiatan ekonomi yang penting bagi kerajaan Alam Melayu. Pada pendapat anda, apakah kepentingan aktiviti perdagangan terhadap kegiatan ekonomi?",
+        schemaNote: "JAWAPAN:",
+        layoutType: "connected-pairs",
+        leftLabels: [
+          "Pertumbuhan Ekonomi",
+          "Pasaran Ekonomi",
+          "Pilihan Barangan Pengguna",
+          "Kecekapan Pengeluaran",
+          "Peluang Pekerjaan",
+          "Kemasukan Pelaburan",
+          "Kerjasama Antarabangsa"
+        ],
+        cards: [
+          "Meningkatkan pertumbuhan ekonomi.",
+          "Memperluaskan pasaran ekonomi tempatan dan luar.",
+          "Menyediakan pelbagai pilihan jenis barangan kepada pengguna.",
+          "Meningkatkan kecekapan pengeluaran produk tempatan.",
+          "Mewujudkan peluang pekerjaan kepada penduduk tempatan.",
+          "Menggalakkan serta meningkatkan kemasukan pelaburan.",
+          "Mengukuhkan hubungan kerjasama antarabangsa"
+        ]
+      }
+    ]
+  },
+  {
+    id: 3,
+    zoneTag: "ZON 3",
+    shortName: "WARISAN KESULTANAN",
+    sectionLabel: "Bahagian B",
+    questionLabel: "Soalan 3",
+    bannerTitle: "ZON 3 : WARISAN KESULTANAN",
+    bannerSub: "BAHAGIAN B - SOALAN 3",
+    characterName: "Paduka Raja Warisan",
+    avatarColor: "#dc2626",
+    subQuestions: [
+      {
+        key: "a",
+        btnLabel: "(a) Soalan 3(a)",
+        qTitle: "SOALAN 3 (a)",
+        marks: "[2 markah]",
+        stimulus: "Pengasasan Kesultanan Pahang dan Perak merupakan kesinambungan langsung daripada Kesultanan Melayu Melaka, manakala Kesultanan Selangor dan Terengganu merupakan kesinambungan daripada Kesultanan Johor Riau.",
+        prompt: "Nyatakan kesultanan yang diasaskan oleh pemerintah berikut:",
+        schemaNote: "(i) [1 markah] | (ii) [1 markah]",
+        layoutType: "sultan-2-slots",
+        leftLabels: [
+          "(i) Sultan Muhammad Shah:",
+          "(ii) Sultan Muzaffar Shah:"
+        ],
+        cards: [
+          "Kesultanan Pahang",
+          "Kesultanan Perak"
+        ],
+        distractors: [
+          "Kesultanan Terengganu",
+          "Kesultanan Selangor"
+        ]
+      },
+      {
+        key: "b",
+        btnLabel: "(b) Soalan 3(b)",
+        qTitle: "SOALAN 3 (b)",
+        marks: "[2 MARKAH] + [2 MARKAH]",
+        stimulus: "",
+        prompt: "Jelaskan pengasasan kesultanan berikut:",
+        schemaNote: "(I) KESULTANAN TERENGGANU [2 MARKAH] & (II) KESULTANAN SELANGOR [2 MARKAH]",
+        layoutType: "terengganu-selangor-tabs",
+        terengganuCards: [
+          "Pengasasan Terengganu berkait rapat dengan Kesultanan Johor Riau.",
+          "Diasaskan pada abad ke-18 oleh keluarga diraja Bendahara Johor Riau.",
+          "Sultan Abdul Jalil menganugerahkan Terengganu kepada Tun Zainal Abidin, putera Tun Habib Abdul Majid (Bendahara Johor Riau).",
+          "Tun Zainal Abidin mengasaskan Kesultanan Terengganu dengan gelaran Sultan Zainal Abidin I.",
+          "Sultan Zainal Abidin I mendirikan pusat pemerintahan pertama di Tanjung Baru, Kuala Berang."
+        ],
+        selangorCards: [
+          "Selangor diasaskan oleh keluarga diraja Bugis dalam Kesultanan Johor Riau pada abad ke-18.",
+          "Raja Lumu (putera Daeng Chelak) menghadap Sultan Kesultanan Johor Riau.",
+          "Raja Lumu (putera Daeng Chelak) menghadap Sultan Perak, Sultan Mahmud Shah untuk mendapatkan pengiktirafan.",
+          "Sultan Mahmud Shah menabalkan Raja Lumu sebagai Sultan Selangor serta menganugerahkan nobat dan cap mohor.",
+          "Raja Lumu mengasaskan Kesultanan Selangor dengan memakai gelaran Sultan Salehuddin Shah.",
+          "Baginda mendirikan pusat pemerintahan pertama di Kuala Selangor."
+        ],
+        cards: [
+          "Pengasasan Terengganu berkait rapat dengan Kesultanan Johor Riau.",
+          "Diasaskan pada abad ke-18 oleh keluarga diraja Bendahara Johor Riau.",
+          "Sultan Abdul Jalil menganugerahkan Terengganu kepada Tun Zainal Abidin, putera Tun Habib Abdul Majid (Bendahara Johor Riau).",
+          "Tun Zainal Abidin mengasaskan Kesultanan Terengganu dengan gelaran Sultan Zainal Abidin I.",
+          "Sultan Zainal Abidin I mendirikan pusat pemerintahan pertama di Tanjung Baru, Kuala Berang.",
+          "Selangor diasaskan oleh keluarga diraja Bugis dalam Kesultanan Johor Riau pada abad ke-18.",
+          "Raja Lumu (putera Daeng Chelak) menghadap Sultan Kesultanan Johor Riau.",
+          "Raja Lumu (putera Daeng Chelak) menghadap Sultan Perak, Sultan Mahmud Shah untuk mendapatkan pengiktirafan.",
+          "Sultan Mahmud Shah menabalkan Raja Lumu sebagai Sultan Selangor serta menganugerahkan nobat dan cap mohor.",
+          "Raja Lumu mengasaskan Kesultanan Selangor dengan memakai gelaran Sultan Salehuddin Shah.",
+          "Baginda mendirikan pusat pemerintahan pertama di Kuala Selangor."
+        ]
+      },
+      {
+        key: "c",
+        btnLabel: "(c) Soalan 3(c)",
+        qTitle: "SOALAN 3 (c)",
+        marks: "[4 markah]",
+        stimulus: "",
+        prompt: "Pada pendapat anda, mengapakah Kesultanan Pahang dan Kesultanan Perak dikatakan warisan langsung daripada Kesultanan Melayu Melaka?",
+        schemaNote: "JAWAPAN:",
+        layoutType: "connected-pairs",
+        leftLabels: [
+          "Legasi Institusi Kesultanan",
+          "Pengasasan Pahang",
+          "Pelantikan Pembesar Pahang",
+          "Pengasasan Keluarga Diraja",
+          "Jemputan Pembesar Perak",
+          "Alat Kebesaran Diraja",
+          "Susur Galur Keturunan"
+        ],
+        cards: [
+          "Kesultanan Perak dan Pahang meneruskan legasi Kesultanan Melayu Melaka secara langsung dalam institusi kesultanannya.",
+          "Kesultanan Pahang diasaskan oleh putera Sultan Mansur Shah, iaitu Raja Muhammad dengan gelaran Sultan Muhammad Shah pada zaman kegemilangan Melaka.",
+          "Pembesar bangsawan Melaka dilantik sebagai Bendahara, Penghulu Bendahan, Temenggung, dan Hulubalang Besar untuk membantu mentadbir Pahang.",
+          "Kesultanan Perak diasaskan oleh keluarga diraja",
+          "Pembesar Perak menjemput putera Sultan Mahmud Shah, iaitu Raja Muzaffar untuk ditabalkan sebagai Sultan Perak.",
+          "Raja Muzaffar berangkat bersama alat kebesaran diraja seperti pedang Cura Manja Kini, sebilah keris, cap mohor, nobat, dan Surat Ciri.",
+          "Susur galur pemerintah Kesultanan Pahang dan Perak merupakan keturunan langsung daripada Kesultanan Melayu Melaka."
+        ]
+      }
+    ]
+  },
+  {
+    id: 4,
+    zoneTag: "ZON 4",
+    shortName: "RAHSIA PEMERINTAHAN SABAH",
+    sectionLabel: "Bahagian B",
+    questionLabel: "Soalan 4",
+    bannerTitle: "ZON 4 : RAHSIA PEMERINTAHAN SABAH",
+    bannerSub: "BAHAGIAN B - SOALAN 4",
+    characterName: "Ketua Pribumi Sabah",
+    avatarColor: "#334155",
+    subQuestions: [
+      {
+        key: "a",
+        btnLabel: "(a) Soalan 4(a)",
+        qTitle: "SOALAN 4 (a)",
+        marks: "[2 markah]",
+        stimulus: "",
+        prompt: "Nyatakan pemerintahan tempatan di kawasan bertanda berikut:",
+        schemaNote: "(i) X dan (ii) Y",
+        layoutType: "sabah-xy-map",
+        cards: [
+          "Wakil Raja Brunei/ Wakil Brunei",
+          "Wakil Raja Sulu/ Wakil Sulu"
+        ],
+        distractors: [
+          "Kepimpinan Kesukuan",
+          "Ketua Bebas"
+        ]
+      },
+      {
+        key: "b",
+        btnLabel: "(b) Soalan 4(b)",
+        qTitle: "SOALAN 4 (b)",
+        marks: "[4 markah]",
+        stimulus: "NOTA AUDIT: Halaman 4 tiada dalam lampiran PDF. Ditandakan sebagai TEKS KURANG JELAS — PERLU SEMAKAN mengikut Peraturan 3.",
+        prompt: "Jelaskan ciri pemerintahan tempatan: (i) Kepimpinan Kesukuan dan (ii) Ketua Bebas.",
+        schemaNote: "TEKS KURANG JELAS — PERLU SEMAKAN",
+        layoutType: "connected-pairs",
+        leftLabels: [
+          "(i) Kepimpinan Kesukuan",
+          "(ii) Ketua Bebas"
+        ],
+        cards: [
+          "(i) Kepimpinan Kesukuan: TEKS KURANG JELAS — PERLU SEMAKAN",
+          "(ii) Ketua Bebas: TEKS KURANG JELAS — PERLU SEMAKAN"
+        ],
+        cardDeckTexts: [
+          "Kad (i) Kepimpinan Kesukuan — TEKS KURANG JELAS — PERLU SEMAKAN",
+          "Kad (ii) Ketua Bebas — TEKS KURANG JELAS — PERLU SEMAKAN"
+        ]
+      },
+      {
+        key: "c",
+        btnLabel: "(c) Soalan 4(c)",
+        qTitle: "SOALAN 4 (c)",
+        marks: "[4 markah]",
+        stimulus: "NOTA AUDIT: Halaman 4 tiada dalam lampiran PDF. Ditandakan sebagai TEKS KURANG JELAS — PERLU SEMAKAN mengikut Peraturan 3.",
+        prompt: "Pada pendapat anda, mengapakah wujud pelbagai bentuk pemerintahan tempatan di Sabah?",
+        schemaNote: "TEKS KURANG JELAS — PERLU SEMAKAN",
+        layoutType: "connected-pairs",
+        leftLabels: [
+          "Sebab Kewujudan Pemerintahan Tempatan Sabah"
+        ],
+        cards: [
+          "TEKS KURANG JELAS — PERLU SEMAKAN"
+        ]
+      }
+    ]
+  },
+  {
+    id: 5,
+    zoneTag: "ZON 5",
+    shortName: "ISTANA KESULTANAN MELAYU MELAKA",
+    sectionLabel: "Bahagian C",
+    questionLabel: "Soalan 1",
+    bannerTitle: "ZON 5 : ISTANA KESULTANAN MELAYU MELAKA",
+    bannerSub: "BAHAGIAN C - SOALAN 1",
+    characterName: "Bendahara Melaka",
+    avatarColor: "#d97706",
+    subQuestions: [
+      {
+        key: "a",
+        btnLabel: "(a) Soalan 1(a)",
+        qTitle: "SOALAN 1 (a)",
+        marks: "[6 markah]",
+        stimulus: "BAHAGIAN C [20 markah] Jawab mana-mana satu soalan daripada bahagian ini. Rajah berikut berkaitan dengan sistem pentadbiran Kesultanan Melayu Melaka:",
+        prompt: "Berdasarkan rajah tersebut, jelaskan sistem pentadbiran Kesultanan Melayu Melaka.",
+        schemaNote: "Susun 5 Hierarki Pentadbiran & Padankan 6 Huraian:",
+        layoutType: "melaka-hierarchy-flow",
+        hierarchyCards: [
+          "Sultan",
+          "Pembesar Berempat",
+          "Pembesar Berlapan",
+          "Pembesar Enam Belas",
+          "Pembesar Tiga Puluh Dua"
+        ],
+        leftLabels: [
+          "Asas Pentadbiran",
+          "Kedudukan Sultan",
+          "Empat Pembesar Utama",
+          "Lapisan Hirarki Bawah",
+          "Peringkat Pentadbiran",
+          "Tugas-tugas Pembesar"
+        ],
+        cards: [
+          "Pentadbiran Melaka berasaskan Sistem Pembesar Empat Lipatan.",
+          "Sultan berada di kedudukan tertinggi dan menjadi puncak kuasa pemerintahan negara.",
+          "Sultan dibantu oleh empat orang pembesar utama yang dikenali sebagai Pembesar Berempat.",
+          "Di bawah Pembesar Berempat terdapat Pembesar Berlapan, diikuti Pembesar Enam Belas, dan lapisan terbawah ialah Pembesar Tiga Puluh Dua.",
+          "Pembesar ini bertindak sebagai pentadbir di peringkat pusat, jajahan, daerah, mukim, dan kampung.",
+          "Tugas pembesar merangkumi mengekalkan keamanan, mengutip cukai melalui sistem serah, membekalkan tentera, serta menggerakkan tenaga buruh melalui sistem kerah."
+        ]
+      },
+      {
+        key: "b",
+        btnLabel: "(b) Soalan 1(b)",
+        qTitle: "SOALAN 1 (b)",
+        marks: "[6 markah]",
+        stimulus: "",
+        prompt: "Terangkan peranan Pembesar Berempat sebagai tonggak pentadbiran Kesultanan Melayu Melaka.",
+        schemaNote: "JAWAPAN:",
+        layoutType: "connected-pairs",
+        leftLabels: [
+          "Gelaran Pembesar Pusat",
+          "Bendahara",
+          "Penghulu Bendahari",
+          "Temenggung",
+          "Laksamana"
+        ],
+        cards: [
+          "Merupakan pembesar utama peringkat pusat yang dikenali sebagai Orang Kaya Berempat.",
+          "Bendahara: Bertindak sebagai penasihat utama raja, menteri utama peringkat pusat, ketua turus angkatan perang, ketua hakim, dan pemangku sultan semasa sultan gering atau tiada di dalam negeri.",
+          "Penghulu Bendahari: Berperanan menguruskan perbendaharaan negeri, memungut hasil atau ufti, menjadi ketua segala bendahari, ketua urus setia istana, dan ketua kepada syahbandar.",
+          "Temenggung: Bertanggungjawab menjaga keselamatan dalam negeri, bertindak sebagai ketua polis dan penjara, penguasa kota Melaka, protokol istana, serta hakim di darat.",
+          "Laksamana: Menjadi ketua angkatan laut, menjaga keselamatan perairan negeri, menjadi pengawal peribadi sultan, ketua utusan/duta ke negara luar, dan hakim di laut."
+        ],
+        cardDeckTexts: [
+          "Merupakan pembesar utama peringkat pusat yang dikenali sebagai Orang Kaya Berempat.",
+          "Bertindak sebagai penasihat utama raja, menteri utama peringkat pusat, ketua turus angkatan perang, ketua hakim, dan pemangku sultan semasa sultan gering atau tiada di dalam negeri.",
+          "Berperanan menguruskan perbendaharaan negeri, memungut hasil atau ufti, menjadi ketua segala bendahari, ketua urus setia istana, dan ketua kepada syahbandar.",
+          "Bertanggungjawab menjaga keselamatan dalam negeri, bertindak sebagai ketua polis dan penjara, penguasa kota Melaka, protokol istana, serta hakim di darat.",
+          "Menjadi ketua angkatan laut, menjaga keselamatan perairan negeri, menjadi pengawal peribadi sultan, ketua utusan/duta ke negara luar, dan hakim di laut."
+        ]
+      },
+      {
+        key: "c",
+        btnLabel: "(c) Soalan 1(c)",
+        qTitle: "SOALAN 1 (c)",
+        marks: "[8 markah]",
+        stimulus: "",
+        prompt: "Pada pendapat anda, apakah kepentingan sistem pemerintahan yang sistematik terhadap pentadbiran negara?",
+        schemaNote: "JAWAPAN (FORMAT 3 FAKTA):",
+        layoutType: "connected-pairs",
+        leftLabels: [
+          "F1 (Fakta 1)",
+          "H (Huraian F1)",
+          "C (Contoh F1)",
+          "F2 (Fakta 2)",
+          "H (Huraian F2)",
+          "C (Contoh F2)",
+          "F3 (Fakta 3)",
+          "H (Huraian F3)",
+          "I (Inferens)"
+        ],
+        cards: [
+          "F1: Memastikan kestabilan politik dan mengekalkan keamanan negara.",
+          "H: Undang-undang dan dasar negara dapat dikuatkuasakan dengan cekap dan teratur bagi mengelakkan kekacauan serta mencegah penyelewengan kuasa.",
+          "C: Contohnya, pembahagian portfolio tugas secara berstruktur menghalang pertindihan kuasa sesama pegawai tadbir.",
+          "F2: Melancarkan perancangan dan memacu kemakmuran ekonomi negara.",
+          "H: Sumber hasil negara dapat diuruskan dengan telus dan sistematik bagi menarik pelabur luar serta membuka peluang pekerjaan kepada rakyat.",
+          "C: Pengutipan cukai yang cekap membolehkan kerajaan membina pelbagai prasarana dan kemudahan awam.",
+          "F3: Menjamin keadilan sosial dan keharmonian hidup rakyat.",
+          "H: Hak kebajikan setiap golongan masyarakat dapat dipelihara dengan adil tanpa wujudnya diskriminasi atau jurang layanan.",
+          "I: Kesimpulannya, pengurusan pentadbiran yang teratur berupaya memperkukuh keyakinan rakyat terhadap pemerintah serta menjamin kelangsungan kedaulatan negara."
+        ],
+        cardDeckTexts: [
+          "Memastikan kestabilan politik dan mengekalkan keamanan negara.",
+          "Undang-undang dan dasar negara dapat dikuatkuasakan dengan cekap dan teratur bagi mengelakkan kekacauan serta mencegah penyelewengan kuasa.",
+          "Contohnya, pembahagian portfolio tugas secara berstruktur menghalang pertindihan kuasa sesama pegawai tadbir.",
+          "Melancarkan perancangan dan memacu kemakmuran ekonomi negara.",
+          "Sumber hasil negara dapat diuruskan dengan telus dan sistematik bagi menarik pelabur luar serta membuka peluang pekerjaan kepada rakyat.",
+          "Pengutipan cukai yang cekap membolehkan kerajaan membina pelbagai prasarana dan kemudahan awam.",
+          "Menjamin keadilan sosial dan keharmonian hidup rakyat.",
+          "Hak kebajikan setiap golongan masyarakat dapat dipelihara dengan adil tanpa wujudnya diskriminasi atau jurang layanan.",
+          "Kesimpulannya, pengurusan pentadbiran yang teratur berupaya memperkukuh keyakinan rakyat terhadap pemerintah serta menjamin kelangsungan kedaulatan negara."
+        ]
+      }
+    ]
+  },
+  {
+    id: 6,
+    zoneTag: "ZON 6",
+    shortName: "LIGA DIPLOMASI DAN PERDAGANGAN",
+    sectionLabel: "Bahagian C",
+    questionLabel: "Soalan 2",
+    bannerTitle: "ZON 6 : LIGA DIPLOMASI DAN PERDAGANGAN",
+    bannerSub: "BAHAGIAN C - SOALAN 2",
+    characterName: "Laksamana Utusan Diraja",
+    avatarColor: "#ca8a04",
+    subQuestions: [
+      {
+        key: "a",
+        btnLabel: "(a) Soalan 2(a)",
+        qTitle: "SOALAN 2 (a)",
+        marks: "[4 markah]",
+        stimulus: "Rajah berikut berkaitan dengan hubungan kerajaan Kedah, Kelantan, Negeri Sembilan dan Perlis dengan negeri-negeri Melayu yang lain (Hubungan Diplomatik & Perdagangan).",
+        prompt: "Apakah yang menjadi asas hubungan kerajaan Kedah, Kelantan, Negeri Sembilan dan Perlis dengan negeri Melayu lain?",
+        schemaNote: "JAWAPAN:",
+        layoutType: "connected-pairs",
+        leftLabels: [
+          "Asas 1: Keserumpunan",
+          "Asas 2: Geografi (Teks Atas)",
+          "Asas 2: Geografi (Teks Bawah)",
+          "Asas 3: Agama"
+        ],
+        cards: [
+          "Keserumpunan: Mempunyai persamaan dalam aspek bahasa dan budaya yang memudahkan interaksi serta melahirkan sikap toleransi sesama kerajaan.",
+          "Geografi: Kedudukan wilayah bersempadan memudahkan hubungan perhubungan darat dan laluan sungai bersama, sekali gus mendorong pembinaan pelabuhan dan kerjasama sempadan.",
+          "Geografi: Kedudukan wilayah bersempadan memudahkan hubungan perhubungan darat dan laluan sungai bersama, sekali gus mendorong pembinaan pelabuhan dan kerjasama keselamatan sempadan.",
+          "Agama: Perkongsian fahaman Islam mendorong pengukuhan syiar Islam melalui peranan ulama, perkongsian institusi pendidikan, dan pertukaran penuntut ilmu."
+        ],
+        cardDeckTexts: [
+          "Mempunyai persamaan dalam aspek bahasa dan budaya yang memudahkan interaksi serta melahirkan sikap toleransi sesama kerajaan.",
+          "Kedudukan wilayah bersempadan memudahkan hubungan perhubungan darat dan laluan sungai bersama, sekali gus mendorong pembinaan pelabuhan dan kerjasama sempadan.",
+          "Kedudukan wilayah bersempadan memudahkan hubungan perhubungan darat dan laluan sungai bersama, sekali gus mendorong pembinaan pelabuhan dan kerjasama keselamatan sempadan.",
+          "Perkongsian fahaman Islam mendorong pengukuhan syiar Islam melalui peranan ulama, perkongsian institusi pendidikan, dan pertukaran penuntut ilmu."
+        ]
+      },
+      {
+        key: "b",
+        btnLabel: "(b) Soalan 2(b)",
+        qTitle: "SOALAN 2 (b)",
+        marks: "[8 markah]",
+        stimulus: "",
+        prompt: "Jelaskan cara jalinan hubungan diplomatik antara kerajaan Kedah, Kelantan, Negeri Sembilan dan Perlis dengan negeri Melayu lain.",
+        schemaNote: "JAWAPAN (FORMAT 3 FAKTA):",
+        layoutType: "connected-pairs",
+        leftLabels: [
+          "F1 (Fakta 1)",
+          "H1 (Huraian 1 bagi F1)",
+          "H2 (Huraian 2 bagi F1)",
+          "C (Contoh F1)",
+          "F2 (Fakta 2)",
+          "H1 (Huraian 1 bagi F2)",
+          "H2 (Huraian 2 bagi F2)",
+          "C (Contoh F2)",
+          "F3 (Fakta 3)",
+          "H1 (Huraian 1 bagi F3)",
+          "C (Contoh F3)"
+        ],
+        cards: [
+          "F1: Hubungan Pengiktirafan.",
+          "H1: Pengiktirafan bertujuan mengesahkan kedaulatan sultan sebagai pemerintah tertinggi bagi sesebuah wilayah yang sah.",
+          "H2: Hal ini mewujudkan jalinan persahabatan berasaskan konsep persamaan taraf antara kerajaan-kerajaan Melayu.",
+          "C: Sebagai contoh, kerajaan Kedah mengakui pertuanan Kesultanan Melayu Melaka, manakala Terengganu mengiktiraf kerajaan Kelantan pimpinan Long Yunus.",
+          "F2: Kerjasama Pertahanan.",
+          "H1: Bantuan ketenteraan dijalin bagi menjamin kelangsungan sesebuah kerajaan serta mengekalkan keselamatannya daripada pencerobohan musuh luar.",
+          "H2: Kerjasama ini dapat menghalang campur tangan kuasa asing yang boleh mengancam kedaulatan negeri.",
+          "C: Sebagai contoh, Long Yunus berjaya menyatukan Kelantan hasil daripada bantuan ketenteraan yang diperoleh daripada kerajaan Terengganu.",
+          "F3: Ikatan Perkahwinan Diraja.",
+          "H1: Perkahwinan antara keluarga diraja merupakan amalan tradisi untuk merapatkan ikatan persaudaraan diplomatik antara kerajaan.",
+          "C: Contohnya, perkahwinan puteri Kelantan iaitu Che' Ku Wan dengan putera Sultan Terengganu, Tengku Muhammad, berjaya mengukuhkan keamanan dan kedaulatan kedua-dua pihak."
+        ],
+        cardDeckTexts: [
+          "Hubungan Pengiktirafan.",
+          "Pengiktirafan bertujuan mengesahkan kedaulatan sultan sebagai pemerintah tertinggi bagi sesebuah wilayah yang sah.",
+          "Hal ini mewujudkan jalinan persahabatan berasaskan konsep persamaan taraf antara kerajaan-kerajaan Melayu.",
+          "Sebagai contoh, kerajaan Kedah mengakui pertuanan Kesultanan Melayu Melaka, manakala Terengganu mengiktiraf kerajaan Kelantan pimpinan Long Yunus.",
+          "Kerjasama Pertahanan.",
+          "Bantuan ketenteraan dijalin bagi menjamin kelangsungan sesebuah kerajaan serta mengekalkan keselamatannya daripada pencerobohan musuh luar.",
+          "Kerjasama ini dapat menghalang campur tangan kuasa asing yang boleh mengancam kedaulatan negeri.",
+          "Sebagai contoh, Long Yunus berjaya menyatukan Kelantan hasil daripada bantuan ketenteraan yang diperoleh daripada kerajaan Terengganu.",
+          "Ikatan Perkahwinan Diraja.",
+          "Perkahwinan antara keluarga diraja merupakan amalan tradisi untuk merapatkan ikatan persaudaraan diplomatik antara kerajaan.",
+          "Contohnya, perkahwinan puteri Kelantan iaitu Che' Ku Wan dengan putera Sultan Terengganu, Tengku Muhammad, berjaya mengukuhkan keamanan dan kedaulatan kedua-dua pihak."
+        ]
+      },
+      {
+        key: "c",
+        btnLabel: "(c) Soalan 2(c)",
+        qTitle: "SOALAN 2 (c) BAHAGIAN C",
+        marks: "[8 markah]",
+        stimulus: "",
+        prompt: "Bagaimanakah hubungan perdagangan menyumbang terhadap kemakmuran dan perkembangan kerajaan Kedah, Kelantan, Negeri Sembilan dan Perlis?",
+        schemaNote: "JAWAPAN (FORMAT 3 FAKTA):",
+        layoutType: "connected-pairs",
+        leftLabels: [
+          "F1 (Fakta 1)",
+          "H (Huraian F1)",
+          "C (Contoh F1)",
+          "F2 (Fakta 2)",
+          "H (Huraian F2)",
+          "C (Contoh F2)",
+          "F3 (Fakta 3)",
+          "H (Huraian F3)",
+          "I (Inferens)"
+        ],
+        cards: [
+          "F1 Pembinaan serta kemajuan pangkalan dan pelabuhan strategik.",
+          "H Terletak di muara dan tebing sungai yang membolehkan kapal dagang berteduh serta berurus niaga dengan lancar.",
+          "C Contohnya pangkalan di Lembah Bujang (Kedah), Pangkalan Galoh (Kelantan), Pelabuhan Kuala Perlis, dan pangkalan di sepanjang Sungai Linggi (Negeri Sembilan).",
+          "F2 Pemanfaatan hasil bumi dan kepelbagaian barang dagangan tempatan.",
+          "H Kekayaan hasil semula jadi menjadi daya penarik utama kepada pedagang luar seperti dari China, India, Arab, Siam, dan Melaka...",
+          "C Komoditi bernilai tinggi yang diperdagangkan termasuklah bijih timah, emas, kayu gaharu, kapur barus, dan beras.",
+          "F3 Perkembangan ekonomi monetari dan peningkatan hasil kerajaan.",
+          "H Aktiviti jual beli merangsang penciptaan dan penggunaan sistem mata wang tempatan yang seragam serta teratur.",
+          "I Hasil kutipan cukai kastam dan pelabuhan meningkatkan pendapatan perbendaharaan negeri untuk membiayai pentadbiran serta membangunkan negeri."
+        ],
+        cardDeckTexts: [
+          "Pembinaan serta kemajuan pangkalan dan pelabuhan strategik.",
+          "Terletak di muara dan tebing sungai yang membolehkan kapal dagang berteduh serta berurus niaga dengan lancar.",
+          "Contohnya pangkalan di Lembah Bujang (Kedah), Pangkalan Galoh (Kelantan), Pelabuhan Kuala Perlis, dan pangkalan di sepanjang Sungai Linggi (Negeri Sembilan).",
+          "Pemanfaatan hasil bumi dan kepelbagaian barang dagangan tempatan.",
+          "Kekayaan hasil semula jadi menjadi daya penarik utama kepada pedagang luar seperti dari China, India, Arab, Siam, dan Melaka...",
+          "Komoditi bernilai tinggi yang diperdagangkan termasuklah bijih timah, emas, kayu gaharu, kapur barus, dan beras.",
+          "Perkembangan ekonomi monetari dan peningkatan hasil kerajaan.",
+          "Aktiviti jual beli merangsang penciptaan dan penggunaan sistem mata wang tempatan yang seragam serta teratur.",
+          "Hasil kutipan cukai kastam dan pelabuhan meningkatkan pendapatan perbendaharaan negeri untuk membiayai pentadbiran serta membangunkan negeri."
+        ]
+      }
+    ]
+  }
+];
+
+// ============================================================================
+// 3. STATE PERMAINAN RPG & INTERAKSI DUA HALA (MESRA SENTUHAN PHONE/TABLET)
+// ============================================================================
+let playerXP = 0;
+let playerCoins = 60;
+let playerStreak = 0;
+let unlockedArtifacts = {};
+
+let currentZoneId = 1;
+let currentSubKey = "a";
+let currentTab3b = "terengganu";
+let studyMode = "misi";
+let highlightKeywordsOn = false;
+let revealedFlashcards = {};
+let completedSubQuestions = {};
+
+let placedSlots = [];
+let placedHierarchySlots = [];
+let placedSelangorSlots = [];
+let shuffledPool = [];
+let shuffledHierarchyPool = [];
+
+// Menyokong pilih kad dahulu ATAU pilih slot kosong dahulu pada Phone/Tablet
+let selectedCardValue = null;
+let selectedPoolType = "main";
+let activeTargetSlotIndex = null;
+let activeTargetSlotType = null;
+let lastCheckResults = null;
+
+function updateRpgHud() {
+  const ranks = [
+    { min: 0, title: "Perantau Muda" },
+    { min: 100, title: "Bentara Istana" },
+    { min: 250, title: "Syahbandar Pelabuhan" },
+    { min: 450, title: "Temenggung Perkasa" },
+    { min: 700, title: "Laksamana Samudera" },
+    { min: 1000, title: "Bendahara Agung" }
+  ];
+  let currentRank = ranks[0].title;
+  for (const r of ranks) {
+    if (playerXP >= r.min) currentRank = r.title;
+  }
+  document.getElementById("hud-rank").textContent = currentRank;
+  document.getElementById("hud-xp").textContent = `${playerXP} XP`;
+  const pct = Math.min(100, Math.round((playerXP % 200) / 2));
+  document.getElementById("hud-xp-fill").style.width = `${pct}%`;
+  document.getElementById("hud-coins").textContent = playerCoins;
+  document.getElementById("hud-streak").textContent = playerStreak;
+  const artCount = Object.keys(unlockedArtifacts).length;
+  document.getElementById("hud-artifacts").textContent = `${artCount}/6`;
+}
+
+function setCompanionSpeech(text) {
+  const el = document.getElementById("companion-bubble");
+  if (el) el.innerHTML = `"${text}"`;
+}
+
+function startAdventureGame() {
+  ensureAudioCtx();
+  playSfxCoin();
+  if (!bgmTimer && BGM_TRACKS[currentTrackIndex].tempo > 0) {
+    startBgmLoop();
+  }
+  showScreen("screen-map");
+}
+
+function showScreen(screenId) {
+  playSfxClick();
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(screenId).classList.add("active");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  if (screenId === "screen-map") renderAdventureMap();
+}
+
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+// ============================================================================
+// 4. LATAR BELAKANG BERBEZA MENGIKUT TEMA 6 ZON & POTRET PEMBESAR
+// ============================================================================
+function getZoneThemeBackgroundSVG(zoneId) {
+  const themes = {
+    1: `<svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+      <defs><linearGradient id="z1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0c4a6e"/><stop offset="55%" stop-color="#0284c7"/><stop offset="100%" stop-color="#064e3b"/></linearGradient></defs>
+      <rect width="1440" height="900" fill="url(#z1)"/>
+      <circle cx="1220" cy="180" r="140" fill="#fef08a" opacity="0.22"/>
+      <ellipse cx="220" cy="760" rx="360" ry="170" fill="#15803d" opacity="0.7"/>
+      <ellipse cx="1240" cy="770" rx="390" ry="180" fill="#166534" opacity="0.7"/>
+    </svg>`,
+    2: `<svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+      <defs><linearGradient id="z2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7c2d12"/><stop offset="50%" stop-color="#d97706"/><stop offset="100%" stop-color="#0369a1"/></linearGradient></defs>
+      <rect width="1440" height="900" fill="url(#z2)"/>
+      <circle cx="720" cy="360" r="180" fill="#fef08a" opacity="0.28"/>
+      <rect y="580" width="1440" height="320" fill="#075985" opacity="0.75"/>
+    </svg>`,
+    3: `<svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+      <defs><linearGradient id="z3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#450a0a"/><stop offset="55%" stop-color="#991b1b"/><stop offset="100%" stop-color="#451a03"/></linearGradient></defs>
+      <rect width="1440" height="900" fill="url(#z3)"/>
+      <polygon points="0,700 260,360 520,700" fill="#78350f" opacity="0.4"/>
+      <polygon points="940,700 1220,340 1440,700" fill="#78350f" opacity="0.4"/>
+    </svg>`,
+    4: `<svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+      <defs><linearGradient id="z4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#064e3b"/><stop offset="55%" stop-color="#047857"/><stop offset="100%" stop-color="#0f172a"/></linearGradient></defs>
+      <rect width="1440" height="900" fill="url(#z4)"/>
+      <polygon points="780,620 1060,180 1360,620" fill="#1e293b" opacity="0.55"/>
+      <ellipse cx="280" cy="780" rx="420" ry="180" fill="#14532d" opacity="0.75"/>
+    </svg>`,
+    5: `<svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+      <defs><linearGradient id="z5" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3b0764"/><stop offset="52%" stop-color="#7c2d12"/><stop offset="100%" stop-color="#451a03"/></linearGradient></defs>
+      <rect width="1440" height="900" fill="url(#z5)"/>
+      <circle cx="720" cy="240" r="210" fill="#fbbf24" opacity="0.18"/>
+    </svg>`,
+    6: `<svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+      <defs><linearGradient id="z6" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e3a8a"/><stop offset="55%" stop-color="#0284c7"/><stop offset="100%" stop-color="#082f49"/></linearGradient></defs>
+      <rect width="1440" height="900" fill="url(#z6)"/>
+      <ellipse cx="200" cy="760" rx="340" ry="160" fill="#15803d" opacity="0.65"/>
+      <ellipse cx="1280" cy="760" rx="360" ry="170" fill="#166534" opacity="0.65"/>
+    </svg>`
+  };
+  return themes[zoneId] || themes[1];
+}
+
+function getIslandSVG(zoneId) {
+  const svgs = {
+    1: `<svg viewBox="0 0 260 140" width="100%" height="100%">
+      <ellipse cx="130" cy="112" rx="115" ry="22" fill="#0ea5e9" opacity="0.55"/>
+      <path d="M25,105 Q65,65 130,72 Q195,65 235,105 Z" fill="#15803d" stroke="#fde047" stroke-width="2.5"/>
+      <polygon points="85,78 130,22 175,78" fill="#1d4ed8" stroke="#93c5fd" stroke-width="2"/>
+      <circle cx="130" cy="48" r="14" fill="#fde047"/>
+    </svg>`,
+    2: `<svg viewBox="0 0 260 140" width="100%" height="100%">
+      <ellipse cx="130" cy="112" rx="115" ry="22" fill="#0ea5e9" opacity="0.55"/>
+      <path d="M25,105 Q130,68 235,105 Z" fill="#166534" stroke="#fde047" stroke-width="2.5"/>
+      <path d="M75,92 L185,92 L200,65 L60,65 Z" fill="#78350f" stroke="#f59e0b" stroke-width="2.5"/>
+      <path d="M90,20 Q135,35 120,65 L85,65 Z" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+      <path d="M132,16 Q175,32 162,65 L132,65 Z" fill="#fde68a" stroke="#d97706" stroke-width="2"/>
+    </svg>`,
+    3: `<svg viewBox="0 0 260 140" width="100%" height="100%">
+      <ellipse cx="130" cy="112" rx="115" ry="22" fill="#0ea5e9" opacity="0.55"/>
+      <path d="M25,105 Q130,68 235,105 Z" fill="#15803d" stroke="#fde047" stroke-width="2.5"/>
+      <rect x="75" y="55" width="110" height="45" fill="#92400e" stroke="#fde047" stroke-width="2"/>
+      <polygon points="60,55 130,15 200,55" fill="#f59e0b" stroke="#fef08a" stroke-width="2.5"/>
+    </svg>`,
+    4: `<svg viewBox="0 0 260 140" width="100%" height="100%">
+      <ellipse cx="130" cy="112" rx="115" ry="22" fill="#0ea5e9" opacity="0.55"/>
+      <path d="M25,105 Q130,65 235,105 Z" fill="#166534" stroke="#fde047" stroke-width="2.5"/>
+      <rect x="78" y="52" width="104" height="42" fill="#78350f" stroke="#f59e0b" stroke-width="2"/>
+      <polygon points="65,52 130,18 195,52" fill="#b45309" stroke="#fde047" stroke-width="2"/>
+    </svg>`,
+    5: `<svg viewBox="0 0 260 140" width="100%" height="100%">
+      <ellipse cx="130" cy="112" rx="115" ry="22" fill="#0ea5e9" opacity="0.55"/>
+      <path d="M25,105 Q130,68 235,105 Z" fill="#15803d" stroke="#fde047" stroke-width="2.5"/>
+      <rect x="65" y="50" width="130" height="48" fill="#b45309" stroke="#fde047" stroke-width="2.5"/>
+      <polygon points="50,50 130,10 210,50" fill="#fbbf24" stroke="#fffbeb" stroke-width="2.5"/>
+    </svg>`,
+    6: `<svg viewBox="0 0 260 140" width="100%" height="100%">
+      <ellipse cx="130" cy="112" rx="115" ry="22" fill="#0ea5e9" opacity="0.55"/>
+      <path d="M25,105 Q130,68 235,105 Z" fill="#15803d" stroke="#fde047" stroke-width="2.5"/>
+      <rect x="55" y="52" width="80" height="42" fill="#92400e" stroke="#fde047" stroke-width="2"/>
+      <polygon points="45,52 95,20 145,52" fill="#f59e0b" stroke="#fef08a" stroke-width="2"/>
+      <path d="M150,92 L215,92 L225,70 L140,70 Z" fill="#78350f" stroke="#fde047" stroke-width="2"/>
+      <path d="M165,30 Q200,45 190,70 L160,70 Z" fill="#fef3c7"/>
+    </svg>`
+  };
+  return svgs[zoneId] || svgs[1];
+}
+
+function getZoneCharacterSVG(color, name) {
+  return `
+    <svg viewBox="0 0 220 225" width="165">
+      <g transform="translate(15, 5)">
+        <path d="M45,65 L35,20 L95,32 L135,12 L150,65 Z" fill="${color}" stroke="#fde047" stroke-width="3.5"/>
+        <circle cx="95" cy="40" r="8" fill="#fef08a"/>
+        <circle cx="95" cy="96" r="36" fill="#fdba74" stroke="#7c2d12" stroke-width="3"/>
+        <circle cx="82" cy="92" r="4.5" fill="#1c1917"/>
+        <circle cx="108" cy="92" r="4.5" fill="#1c1917"/>
+        <path d="M80,108 Q95,103 110,108" fill="none" stroke="#1c1917" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M85,115 Q95,121 105,115" fill="none" stroke="#7c2d12" stroke-width="2.5"/>
+        <path d="M35,134 L155,134 L170,218 L20,218 Z" fill="${color}" stroke="#fde047" stroke-width="3.5"/>
+        <path d="M75,134 L95,175 L115,134" fill="none" stroke="#fde047" stroke-width="4"/>
+        <rect x="65" y="180" width="60" height="16" rx="6" fill="#78350f" stroke="#fde047" stroke-width="2.5"/>
+      </g>
+    </svg>
+    <div class="character-name-tag">⚜ ${name}</div>
+  `;
+}
+
+function renderAdventureMap() {
+  const container = document.getElementById("map-islands-container");
+  container.innerHTML = ZONES_DATA.map(z => {
+    const doneCount = z.subQuestions.filter(sq => completedSubQuestions[`${z.id}-${sq.key}`]).length;
+    const starsStr = "⭐".repeat(doneCount) + "☆".repeat(3 - doneCount);
+    return `
+      <div class="island-node" onclick="openZone(${z.id})">
+        <div class="island-art-wrap">${getIslandSVG(z.id)}</div>
+        <div class="island-label-plaque">
+          <div class="island-num-badge">${z.id}</div>
+          <div class="island-stars-row">${starsStr} (${doneCount}/3)</div>
+          <div class="island-zone-tag">${z.zoneTag}</div>
+          <div class="island-zone-title">${z.shortName}</div>
+          <div class="island-zone-sub">${z.sectionLabel} • ${z.questionLabel}</div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+// ============================================================================
+// 5. BUKA ZON, SUBSOALAN & ALATAN KREATIF
+// ============================================================================
+function openZone(zoneId, subKey = "a") {
+  currentZoneId = zoneId;
+  currentSubKey = subKey;
+  const zone = ZONES_DATA.find(z => z.id === zoneId);
+
+  document.getElementById("dynamic-zone-bg").innerHTML = getZoneThemeBackgroundSVG(zoneId);
+  document.getElementById("zone-banner-title").textContent = zone.bannerTitle;
+  document.getElementById("zone-banner-sub").textContent = zone.bannerSub;
+  document.getElementById("zone-character-svg").innerHTML = getZoneCharacterSVG(zone.avatarColor, zone.characterName);
+
+  initSubQuestionState();
+  renderZoneSidebar();
+  renderParchmentBoard();
+  setCompanionSpeech(`Selamat tiba di ${zone.shortName}! Sentuh mana-mana slot kosong atau kad warkah di bawah.`);
+  showScreen("screen-zone");
+}
+
+function selectSubQuestion(subKey) {
+  playSfxClick();
+  currentSubKey = subKey;
+  initSubQuestionState();
+  renderZoneSidebar();
+  renderParchmentBoard();
+  setCompanionSpeech(`Subsoalan (${subKey}) dibuka! Semua slot bermula kosong. Padankan kad warkah di bawah.`);
+}
+
+function switchStudyMode(mode) {
+  playSfxClick();
+  studyMode = mode;
+  revealedFlashcards = {};
+  if (mode === "hafal") {
+    setCompanionSpeech("Mod Hafal & Dedah aktif! Sentuh setiap tirai emas untuk menyemak dan menghafal isi jawapan.");
+  } else {
+    setCompanionSpeech("Mod Misi aktif! Padankan kad warkah di bawah ke dalam slot kosong.");
+  }
+  renderParchmentBoard();
+}
+
+function toggleKeywordHighlighter() {
+  playSfxClick();
+  highlightKeywordsOn = !highlightKeywordsOn;
+  setCompanionSpeech(highlightKeywordsOn
+    ? "Sorotan Kata Kunci DIAKTIFKAN! Perkataan penting sejarah kini diserlahkan dengan warna emas."
+    : "Sorotan Kata Kunci DIMATIKAN.");
+  renderParchmentBoard();
+}
+
+function toggleFlashcardReveal(idx) {
+  playSfxClick();
+  revealedFlashcards[idx] = !revealedFlashcards[idx];
+  renderParchmentBoard();
+}
+
+function initSubQuestionState() {
+  const zone = ZONES_DATA.find(z => z.id === currentZoneId);
+  const sq = zone.subQuestions.find(s => s.key === currentSubKey);
+  selectedCardValue = null;
+  selectedPoolType = "main";
+  activeTargetSlotIndex = null;
+  activeTargetSlotType = null;
+  lastCheckResults = null;
+  studyMode = "misi";
+  revealedFlashcards = {};
+
+  if (sq.layoutType === "terengganu-selangor-tabs") {
+    placedSlots = new Array(sq.terengganuCards.length).fill(null);
+    placedSelangorSlots = new Array(sq.selangorCards.length).fill(null);
+    const all11 = [
+      ...sq.terengganuCards.map((t, i) => ({ value: t, display: t, isDistractor: false, id: `T-${i}` })),
+      ...sq.selangorCards.map((t, i) => ({ value: t, display: t, isDistractor: false, id: `S-${i}` }))
+    ];
+    shuffledPool = shuffleArray(all11);
+  } else if (sq.layoutType === "melaka-hierarchy-flow") {
+    placedHierarchySlots = new Array(sq.hierarchyCards.length).fill(null);
+    placedSlots = new Array(sq.cards.length).fill(null);
+    shuffledHierarchyPool = shuffleArray(sq.hierarchyCards.map((t, i) => ({ value: t, display: t, isDistractor: false, id: `H-${i}` })));
+    shuffledPool = shuffleArray(sq.cards.map((t, i) => ({
+      value: t,
+      display: sq.cardDeckTexts ? sq.cardDeckTexts[i] : t,
+      isDistractor: false,
+      id: `M-${i}`
+    })));
+  } else {
+    placedSlots = new Array(sq.cards.length).fill(null);
+    const correctItems = sq.cards.map((t, i) => ({
+      value: t,
+      display: sq.cardDeckTexts ? sq.cardDeckTexts[i] : t,
+      isDistractor: false,
+      id: `C-${i}`
+    }));
+    const distractorItems = (sq.distractors || []).map((t, i) => ({
+      value: t,
+      display: t,
+      isDistractor: true,
+      id: `D-${i}`
+    }));
+    shuffledPool = shuffleArray([...correctItems, ...distractorItems]);
+  }
+}
+
+function renderZoneSidebar() {
+  const zone = ZONES_DATA.find(z => z.id === currentZoneId);
+  const container = document.getElementById("subq-buttons-container");
+  container.innerHTML = zone.subQuestions.map(sq => {
+    const isAct = sq.key === currentSubKey;
+    const isDone = completedSubQuestions[`${zone.id}-${sq.key}`];
+    return `
+      <button class="subq-pill-btn ${isAct ? 'active' : 'inactive'}" onclick="selectSubQuestion('${sq.key}')">
+        <span>${sq.btnLabel}</span>
+        <span>${isDone ? '⭐' : ''}</span>
+      </button>
+    `;
+  }).join("");
+}
+
+// ============================================================================
+// 6. KUASA BANTUAN RPG (KERIS PETUNJUK & PERISAI SINGKIR PENGGANGGU)
+// ============================================================================
+function useSmartHint() {
+  const zone = ZONES_DATA.find(z => z.id === currentZoneId);
+  const sq = zone.subQuestions.find(s => s.key === currentSubKey);
+
+  if (studyMode === "hafal") switchStudyMode("misi");
+
+  if (playerCoins < 10) {
+    playSfxError();
+    setCompanionSpeech("Syiling Kupang tidak mencukupi! Jawab soalan dengan betul untuk meraih lebih banyak Kupang.");
+    return;
+  }
+
+  lastCheckResults = null;
+
+  if (sq.layoutType === "melaka-hierarchy-flow") {
+    const hIdx = placedHierarchySlots.findIndex((v, i) => v !== sq.hierarchyCards[i]);
+    if (hIdx !== -1) {
+      placedHierarchySlots[hIdx] = sq.hierarchyCards[hIdx];
+      playerCoins -= 10;
+      playSfxCoin();
+      updateRpgHud();
+      setCompanionSpeech(`🗡️ Kuasa Keris Petunjuk (-10 Kupang)! Kotak Hierarki ke-${hIdx + 1} telah diisi dengan tepat.`);
+      renderParchmentBoard();
+      return;
+    }
+  }
+
+  if (sq.layoutType === "terengganu-selangor-tabs") {
+    if (currentTab3b === "terengganu") {
+      const missingCard = sq.terengganuCards.find(c => !placedSlots.includes(c));
+      const emptyIdx = placedSlots.findIndex(v => v === null || !sq.terengganuCards.includes(v));
+      if (missingCard && emptyIdx !== -1) {
+        placedSlots[emptyIdx] = missingCard;
+        playerCoins -= 10;
+        playSfxCoin();
+        updateRpgHud();
+        setCompanionSpeech("🗡️ Kuasa Keris Petunjuk (-10 Kupang)! Satu fakta Kesultanan Terengganu telah dilengkapkan.");
+        renderParchmentBoard();
+        return;
+      }
+    } else {
+      const missingCard = sq.selangorCards.find(c => !placedSelangorSlots.includes(c));
+      const emptyIdx = placedSelangorSlots.findIndex(v => v === null || !sq.selangorCards.includes(v));
+      if (missingCard && emptyIdx !== -1) {
+        placedSelangorSlots[emptyIdx] = missingCard;
+        playerCoins -= 10;
+        playSfxCoin();
+        updateRpgHud();
+        setCompanionSpeech("🗡️ Kuasa Keris Petunjuk (-10 Kupang)! Satu fakta Kesultanan Selangor telah dilengkapkan.");
+        renderParchmentBoard();
+        return;
+      }
+    }
+  }
+
+  const targetIdx = placedSlots.findIndex((v, i) => v !== sq.cards[i]);
+  if (targetIdx !== -1) {
+    placedSlots[targetIdx] = sq.cards[targetIdx];
+    playerCoins -= 10;
+    playSfxCoin();
+    updateRpgHud();
+    setCompanionSpeech(`🗡️ Kuasa Keris Petunjuk (-10 Kupang)! Slot ke-${targetIdx + 1} telah diisi dengan jawapan tepat!`);
+    renderParchmentBoard();
+  } else {
+    setCompanionSpeech("Semua slot sudah diisi dengan jawapan yang tepat! Tekan butang Semak Jawapan.");
+  }
+}
+
+function removeDistractorCards() {
+  const hasDistractors = shuffledPool.some(item => item.isDistractor);
+  if (!hasDistractors) {
+    playSfxClick();
+    setCompanionSpeech("Soalan ini tiada kad pengganggu luar. Gunakan 🗡️ Keris Petunjuk untuk memasang satu kad!");
+    return;
+  }
+  if (playerCoins < 15) {
+    playSfxError();
+    setCompanionSpeech("Syiling Kupang tidak mencukupi (perlu 15 Kupang) untuk menyingkirkan kad pengganggu!");
+    return;
+  }
+  playerCoins -= 15;
+  shuffledPool = shuffledPool.filter(item => !item.isDistractor);
+  placedSlots = placedSlots.map(v => (v && !shuffledPool.some(i => i.value === v)) ? null : v);
+  playSfxCoin();
+  updateRpgHud();
+  setCompanionSpeech("🛡️ Perisai Tapis digunakan (-15 Kupang)! Semua kad pengganggu telah disingkirkan daripada dek!");
+  renderParchmentBoard();
+}
+
+// ============================================================================
+// 7. RENDER PAPAN MANUSKRIP SOALAN (DENGAN SOKONGAN SENTUHAN DUA HALA)
+// ============================================================================
+function isTargetSlotActive(idx, type) {
+  return activeTargetSlotIndex === idx && activeTargetSlotType === type;
+}
+
+function renderParchmentBoard() {
+  const zone = ZONES_DATA.find(z => z.id === currentZoneId);
+  const sq = zone.subQuestions.find(s => s.key === currentSubKey);
+  const board = document.getElementById("parchment-board-content");
+
+  let html = `
+    <div class="parchment-top-row">
+      <div class="q-header-title">📜 ${sq.qTitle}</div>
+      <div class="q-markah-label">${sq.marks}</div>
+    </div>
+  `;
+
+  if (sq.stimulus) {
+    html += `<div class="q-stimulus-box">${applyKeywordHighlight(sq.stimulus)}</div>`;
+  }
+
+  html += `<div class="q-prompt-text">${applyKeywordHighlight(sq.prompt)}</div>`;
+
+  html += `
+    <div class="board-helper-bar">
+      <div class="mode-switch-group">
+        <button class="mini-tool-btn ${studyMode === 'misi' ? 'active-mode' : ''}" onclick="switchStudyMode('misi')">
+          ⚔️ Mod Misi
+        </button>
+        <button class="mini-tool-btn ${studyMode === 'hafal' ? 'active-mode' : ''}" onclick="switchStudyMode('hafal')">
+          🧠 Mod Hafal &amp; Dedah
+        </button>
+        <button class="mini-tool-btn ${highlightKeywordsOn ? 'keyword-on' : ''}" onclick="toggleKeywordHighlighter()">
+          🖍️ Kata Kunci
+        </button>
+        <button class="mini-tool-btn" onclick="speakCurrentQuestion()">
+          🗣️ Baca
+        </button>
+      </div>
+      <div class="mode-switch-group">
+        <button class="mini-tool-btn power-gold" onclick="useSmartHint()">
+          🗡️ Petunjuk (-10 🪙)
+        </button>
+        ${(sq.distractors && sq.distractors.length > 0) ? `
+          <button class="mini-tool-btn power-gold" onclick="removeDistractorCards()">
+            🛡️ Tapis (-15 🪙)
+          </button>
+        ` : ``}
+        <button class="mini-tool-btn" onclick="resetCurrentSubQuestion()">
+          🔄 Gaul
+        </button>
+        <button class="mini-tool-btn" onclick="openCurrentQuestionSchema()">
+          📖 Skema
+        </button>
+      </div>
+    </div>
+    <div id="feedback-box" class="feedback-banner"></div>
+  `;
+
+  // MOD HAFAL & DEDAH
+  if (studyMode === "hafal") {
+    html += `
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+        <div style="font-size:0.82rem;font-weight:800;color:#78350f;">
+          💡 Cuba sebut jawapan di dalam hati dahulu, kemudian sentuh setiap baris tirai emas untuk mendedahkan jawapan asal:
+        </div>
+        ${sq.cards.map((c, idx) => {
+          const isRev = revealedFlashcards[idx];
+          const lbl = sq.leftLabels ? sq.leftLabels[idx] : `Isi Jawapan ${idx + 1}`;
+          return isRev
+            ? `<div class="flashcard-revealed" onclick="toggleFlashcardReveal(${idx})">
+                 ✅ <strong>${lbl}:</strong> ${applyKeywordHighlight(c)} <span style="float:right;font-size:0.74rem;color:#047857;">[Tutup]</span>
+               </div>`
+            : `<div class="flashcard-curtain" onclick="toggleFlashcardReveal(${idx})">
+                 <span>🔒 <strong>${lbl}</strong> — Cuba ingat fakta sebelum sentuh!</span>
+                 <span>👁️ Dedah</span>
+               </div>`;
+        }).join("")}
+        <div style="text-align:center;margin-top:8px;">
+          <button class="mini-tool-btn active-mode" style="padding:10px 22px;font-size:0.86rem;" onclick="switchStudyMode('misi')">
+            ⚔️ Saya Sudah Hafal! Uji Saya Dalam Mod Misi ➔
+          </button>
+        </div>
+      </div>
+    `;
+    board.innerHTML = html;
+    return;
+  }
+
+  // MOD MISI (PADANKAN KAD):
+  // 1. MULTI-SELECT BARS (Zon 1 Soalan 1a & 1b)
+  if (sq.layoutType === "multi-select-bars") {
+    html += `<div class="gold-bars-stack">`;
+    sq.cards.forEach((_, idx) => {
+      const val = placedSlots[idx];
+      const placeholder = sq.slotPlaceholders ? sq.slotPlaceholders[idx] : `Slot Jawapan ${idx + 1} (Kosong)`;
+      const statusCls = lastCheckResults ? (lastCheckResults.main[idx] ? 'correct' : 'wrong') : '';
+      const targetCls = isTargetSlotActive(idx, 'main') ? 'target-slot-active' : '';
+      html += `
+        <div class="gold-bar-slot ${val ? 'filled' : ''} ${statusCls} ${targetCls}" onclick="handleSlotClick(${idx}, 'main')">
+          ${val ? applyKeywordHighlight(val) : `<span>[ ${placeholder} ]</span>`}
+        </div>
+      `;
+    });
+    html += `</div>`;
+  }
+
+  // 2. ZON 2 SOALAN 2(a): 4 KAD BERGAMBAR PELABUHAN
+  else if (sq.layoutType === "port-4-cards") {
+    const portSVGs = [
+      `<svg viewBox="0 0 200 115" width="100%" height="100%">
+        <rect width="200" height="115" fill="#7dd3fc"/>
+        <rect y="70" width="200" height="45" fill="#0284c7"/>
+        <polygon points="0,70 95,52 145,70" fill="#15803d"/>
+        <rect x="45" y="55" width="95" height="16" fill="#b45309" stroke="#78350f" stroke-width="2"/>
+        <circle cx="75" cy="48" r="10" fill="#92400e"/>
+        <circle cx="105" cy="48" r="10" fill="#92400e"/>
+      </svg>`,
+      `<svg viewBox="0 0 200 115" width="100%" height="100%">
+        <rect width="200" height="115" fill="#bae6fd"/>
+        <rect y="78" width="200" height="37" fill="#65a30d"/>
+        <rect x="52" y="45" width="96" height="38" fill="#92400e" stroke="#451a03" stroke-width="2"/>
+        <polygon points="38,45 100,14 162,45" fill="#b45309" stroke="#78350f" stroke-width="2"/>
+        <rect x="88" y="58" width="22" height="25" fill="#451a03"/>
+      </svg>`,
+      `<svg viewBox="0 0 200 115" width="100%" height="100%">
+        <rect width="200" height="115" fill="#bae6fd"/>
+        <rect y="80" width="200" height="35" fill="#ca8a04"/>
+        <rect x="35" y="42" width="130" height="42" fill="#78350f" stroke="#451a03" stroke-width="2"/>
+        <polygon points="22,42 100,12 178,42" fill="#92400e" stroke="#451a03" stroke-width="2"/>
+        <rect x="55" y="62" width="22" height="20" fill="#d97706"/>
+        <rect x="85" y="62" width="22" height="20" fill="#b45309"/>
+      </svg>`,
+      `<svg viewBox="0 0 200 115" width="100%" height="100%">
+        <rect width="200" height="115" fill="#bae6fd"/>
+        <rect y="80" width="200" height="35" fill="#eab308"/>
+        <rect x="42" y="48" width="116" height="34" fill="#fef3c7" stroke="#92400e" stroke-width="2"/>
+        <polygon points="32,48 55,26 145,26 168,48" fill="#dc2626" stroke="#991b1b" stroke-width="2"/>
+        <circle cx="75" cy="70" r="8" fill="#f59e0b"/>
+        <circle cx="102" cy="70" r="8" fill="#16a34a"/>
+        <circle cx="128" cy="70" r="8" fill="#ea580c"/>
+      </svg>`
+    ];
+    const pictureHints = [
+      "Gambar 1: Jeti Air",
+      "Gambar 2: Penginapan",
+      "Gambar 3: Gudang",
+      "Gambar 4: Pasar"
+    ];
+    html += `<div class="port-cards-grid">`;
+    sq.cards.forEach((_, idx) => {
+      const val = placedSlots[idx];
+      const statusCls = lastCheckResults ? (lastCheckResults.main[idx] ? 'correct' : 'wrong') : '';
+      const targetCls = isTargetSlotActive(idx, 'main') ? 'target-slot-active' : '';
+      html += `
+        <div class="port-Picture-card ${statusCls}" onclick="handleSlotClick(${idx}, 'main')">
+          <div class="port-svg-holder">${portSVGs[idx]}</div>
+          <div class="port-label-slot ${val ? 'filled' : ''} ${targetCls}">
+            ${val ? applyKeywordHighlight(val) : `[ ${pictureHints[idx]} — Sentuh ]`}
+          </div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  }
+
+  // 3. ZON 3 SOALAN 3(a): 2 SLOT PEMERINTAH
+  else if (sq.layoutType === "sultan-2-slots") {
+    html += `<div class="xy-slots-column">`;
+    sq.leftLabels.forEach((lbl, idx) => {
+      const val = placedSlots[idx];
+      const statusCls = lastCheckResults ? (lastCheckResults.main[idx] ? 'correct' : 'wrong') : '';
+      const targetCls = isTargetSlotActive(idx, 'main') ? 'target-slot-active' : '';
+      html += `
+        <div class="xy-row">
+          <div class="xy-label" style="min-width:210px;">${lbl}</div>
+          <div class="xy-drop-box ${val ? 'filled' : ''} ${statusCls} ${targetCls}" onclick="handleSlotClick(${idx}, 'main')">
+            ${val ? applyKeywordHighlight(val) : `[ Slot Kosong — Pilih kesultanan ]`}
+          </div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  }
+
+  // 4. ZON 3 SOALAN 3(b): TAB (I) KESULTANAN TERENGGANU & (II) KESULTANAN SELANGOR
+  else if (sq.layoutType === "terengganu-selangor-tabs") {
+    const tFilledCount = placedSlots.filter(Boolean).length;
+    const sFilledCount = placedSelangorSlots.filter(Boolean).length;
+    html += `
+      <div class="sultanate-tabs-row">
+        <button class="sultanate-tab-btn ${currentTab3b === 'terengganu' ? 'active' : ''}" onclick="switchTab3b('terengganu')">
+          (I) KESULTANAN TERENGGANU (${tFilledCount}/5)
+        </button>
+        <button class="sultanate-tab-btn ${currentTab3b === 'selangor' ? 'active' : ''}" onclick="switchTab3b('selangor')">
+          (II) KESULTANAN SELANGOR (${sFilledCount}/6)
+        </button>
+      </div>
+      <div class="blue-bullet-panel">
+    `;
+    if (currentTab3b === "terengganu") {
+      sq.terengganuCards.forEach((_, idx) => {
+        const val = placedSlots[idx];
+        const statusCls = lastCheckResults ? (lastCheckResults.terengganu[idx] ? 'correct' : 'wrong') : '';
+        const targetCls = isTargetSlotActive(idx, 'terengganu') ? 'target-slot-active' : '';
+        html += `
+          <div class="bullet-slot-item ${val ? 'filled' : ''} ${statusCls} ${targetCls}" onclick="handleSlotClick(${idx}, 'terengganu')">
+            <span style="color:#1d4ed8;font-weight:900;">•</span>
+            <span>${val ? applyKeywordHighlight(val) : `[ Slot Terengganu ${idx + 1} (Kosong) — Sentuh untuk pilih warkah ]`}</span>
+          </div>
+        `;
+      });
+    } else {
+      sq.selangorCards.forEach((_, idx) => {
+        const val = placedSelangorSlots[idx];
+        const statusCls = lastCheckResults ? (lastCheckResults.selangor[idx] ? 'correct' : 'wrong') : '';
+        const targetCls = isTargetSlotActive(idx, 'selangor') ? 'target-slot-active' : '';
+        html += `
+          <div class="bullet-slot-item ${val ? 'filled' : ''} ${statusCls} ${targetCls}" onclick="handleSlotClick(${idx}, 'selangor')">
+            <span style="color:#1d4ed8;font-weight:900;">•</span>
+            <span>${val ? applyKeywordHighlight(val) : `[ Slot Selangor ${idx + 1} (Kosong) — Sentuh untuk pilih warkah ]`}</span>
+          </div>
+        `;
+      });
+    }
+    html += `</div>`;
+  }
+
+  // 5. ZON 4 SOALAN 4(a): SLOT (i) X & (ii) Y + PETA SABAH
+  else if (sq.layoutType === "sabah-xy-map") {
+    const valX = placedSlots[0];
+    const valY = placedSlots[1];
+    const clsX = lastCheckResults ? (lastCheckResults.main[0] ? 'correct' : 'wrong') : '';
+    const clsY = lastCheckResults ? (lastCheckResults.main[1] ? 'correct' : 'wrong') : '';
+    const tClsX = isTargetSlotActive(0, 'main') ? 'target-slot-active' : '';
+    const tClsY = isTargetSlotActive(1, 'main') ? 'target-slot-active' : '';
+    html += `
+      <div class="sabah-split-layout">
+        <div class="xy-slots-column">
+          <div class="xy-row">
+            <div class="xy-label">(i) X:</div>
+            <div class="xy-drop-box ${valX ? 'filled' : ''} ${clsX} ${tClsX}" onclick="handleSlotClick(0, 'main')">
+              ${valX ? applyKeywordHighlight(valX) : `[ Slot Kosong Kawasan X ]`}
+            </div>
+          </div>
+          <div class="xy-row">
+            <div class="xy-label">(ii) Y:</div>
+            <div class="xy-drop-box ${valY ? 'filled' : ''} ${clsY} ${tClsY}" onclick="handleSlotClick(1, 'main')">
+              ${valY ? applyKeywordHighlight(valY) : `[ Slot Kosong Kawasan Y ]`}
+            </div>
+          </div>
+        </div>
+        <div class="sabah-map-box">
+          <svg viewBox="0 0 260 190" width="225" height="162">
+            <path d="M30,155 L45,110 L82,82 L115,35 L152,25 L185,48 L232,68 L215,112 L238,138 L185,162 L95,168 Z"
+                  fill="#fde047" stroke="#ca8a04" stroke-width="3"/>
+            <path d="M35,148 L50,108 L85,80 L115,40 L125,65 L85,125 L55,155 Z" fill="#facc15" opacity="0.85"/>
+            <path d="M150,35 L185,50 L228,70 L212,110 L232,135 L185,155 L155,105 Z" fill="#eab308" opacity="0.75"/>
+            <circle cx="78" cy="106" r="15" fill="#dc2626" stroke="#fff" stroke-width="2.5"/>
+            <text x="78" y="111" text-anchor="middle" fill="#fff" font-weight="900" font-size="14">X</text>
+            <circle cx="182" cy="108" r="15" fill="#1d4ed8" stroke="#fff" stroke-width="2.5"/>
+            <text x="182" y="113" text-anchor="middle" fill="#fff" font-weight="900" font-size="14">Y</text>
+          </svg>
+        </div>
+      </div>
+    `;
+  }
+
+  // 6. ZON 5 SOALAN 1(a): CARTA ALIR HIERARKI + 6 SLOT PADANAN HURAIAN
+  else if (sq.layoutType === "melaka-hierarchy-flow") {
+    html += `
+      <div style="font-size:0.79rem;font-weight:900;color:#78350f;">BAHAGIAN 1: SUSUN RAJAH HIERARKI PENTADBIRAN MENGIKUT URUTAN ASAL (1 HINGGA 5)</div>
+      <div class="melaka-flowchart-row">
+    `;
+    sq.hierarchyCards.forEach((_, idx) => {
+      const val = placedHierarchySlots[idx];
+      const cls = idx === 0 ? "first-slot" : "other-slot";
+      const statusCls = lastCheckResults ? (lastCheckResults.hierarchy[idx] ? 'correct' : 'wrong') : '';
+      const targetCls = isTargetSlotActive(idx, 'hierarchy') ? 'target-slot-active' : '';
+      html += `
+        <div class="flow-box-slot ${cls} ${val ? 'filled' : ''} ${statusCls} ${targetCls}" onclick="handleSlotClick(${idx}, 'hierarchy')">
+          ${val ? applyKeywordHighlight(val) : `[ Hierarki ${idx + 1} (Kosong) ]`}
+        </div>
+        ${idx < sq.hierarchyCards.length - 1 ? `<div class="flow-arrow">➔</div>` : ``}
+      `;
+    });
+    html += `</div>`;
+
+    html += `
+      <div class="card-deck-area" id="hierarchy-deck-box" style="margin-bottom:6px;">
+        <div class="deck-title-bar">
+          <span>👑 DEK WARKAH HIERARKI (SENTUH UNTUK SUSUN KE DALAM 5 KOTAK DI ATAS):</span>
+        </div>
+        <div class="deck-cards-wrap">
+          ${shuffledHierarchyPool.map(item => {
+            const isUsed = placedHierarchySlots.includes(item.value);
+            const isSel = selectedPoolType === 'hierarchy' && selectedCardValue === item.value;
+            return `
+              <button class="selectable-card ${isUsed ? 'used' : ''} ${isSel ? 'selected-active' : ''}"
+                      onclick="handleDeckCardClick('${escapeQuotes(item.value)}', 'hierarchy')">
+                ⚜ ${applyKeywordHighlight(item.display)}
+              </button>
+            `;
+          }).join("")}
+        </div>
+      </div>
+      <div style="font-size:0.79rem;font-weight:900;color:#78350f;margin-top:4px;">BAHAGIAN 2: PADANKAN 6 ISI SISTEM PENTADBIRAN KESULTANAN MELAYU MELAKA</div>
+      <div class="connected-pairs-container">
+    `;
+    sq.cards.forEach((_, idx) => {
+      const val = placedSlots[idx];
+      const lbl = sq.leftLabels[idx];
+      const statusCls = lastCheckResults ? (lastCheckResults.main[idx] ? 'correct' : 'wrong') : '';
+      const targetCls = isTargetSlotActive(idx, 'main') ? 'target-slot-active' : '';
+      html += `
+        <div class="connected-pair-row">
+          <div class="left-dark-card">${lbl}</div>
+          <div class="gold-connector-line"></div>
+          <div class="right-light-slot ${val ? 'filled' : ''} ${statusCls} ${targetCls}" onclick="handleSlotClick(${idx}, 'main')">
+            ${val ? applyKeywordHighlight(val) : `[ Slot Kosong — Sentuh untuk pilih warkah huraian ]`}
+          </div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  }
+
+  // 7. CONNECTED PAIRS
+  else if (sq.layoutType === "connected-pairs") {
+    html += `<div class="connected-pairs-container">`;
+    sq.cards.forEach((_, idx) => {
+      const val = placedSlots[idx];
+      const lbl = sq.leftLabels ? sq.leftLabels[idx] : `Isi ${idx + 1}`;
+      const statusCls = lastCheckResults ? (lastCheckResults.main[idx] ? 'correct' : 'wrong') : '';
+      const targetCls = isTargetSlotActive(idx, 'main') ? 'target-slot-active' : '';
+      html += `
+        <div class="connected-pair-row">
+          <div class="left-dark-card">${lbl}</div>
+          <div class="gold-connector-line"></div>
+          <div class="right-light-slot ${val ? 'filled' : ''} ${statusCls} ${targetCls}" onclick="handleSlotClick(${idx}, 'main')">
+            ${val ? applyKeywordHighlight(val) : `[ Slot Kosong — Sentuh untuk pilih warkah jawapan ]`}
+          </div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  }
+
+  // DEK PILIHAN KAD WARKAH DIRAJA
+  const usedValues = sq.layoutType === "terengganu-selangor-tabs"
+    ? [...placedSlots, ...placedSelangorSlots]
+    : placedSlots;
+
+  html += `
+    <div class="card-deck-area" id="main-deck-box">
+      <div class="deck-title-bar">
+        <span>📜 MEJA WARKAH JAWAPAN (SENTUH WARKAH UNTUK MASUKKAN KE DALAM SLOT):</span>
+        <span>${usedValues.filter(Boolean).length} / ${sq.cards.length} Slot Diisi</span>
+      </div>
+      <div class="deck-cards-wrap">
+        ${shuffledPool.map(item => {
+          const isUsed = usedValues.includes(item.value);
+          const isSel = selectedPoolType === 'main' && selectedCardValue === item.value;
+          return `
+            <button class="selectable-card ${isUsed ? 'used' : ''} ${isSel ? 'selected-active' : ''}"
+                    onclick="handleDeckCardClick('${escapeQuotes(item.value)}', 'main')">
+              ⚜ ${applyKeywordHighlight(item.display)}
+            </button>
+          `;
+        }).join("")}
+      </div>
+    </div>
+  `;
+
+  board.innerHTML = html;
+}
+
+function escapeQuotes(str) {
+  return str.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+}
+
+function switchTab3b(tabName) {
+  playSfxClick();
+  currentTab3b = tabName;
+  activeTargetSlotIndex = null;
+  activeTargetSlotType = null;
+  renderParchmentBoard();
+}
+
+// ============================================================================
+// 8. INTERAKSI SENTUHAN DUA HALA (PILIH KAD DAHULU ATAU PILIH SLOT DAHULU)
+// ============================================================================
+function handleDeckCardClick(cardValue, poolType = "main") {
+  playSfxClick();
+  lastCheckResults = null;
+  const zone = ZONES_DATA.find(z => z.id === currentZoneId);
+  const sq = zone.subQuestions.find(s => s.key === currentSubKey);
+
+  // Jika pengguna telah memilih satu slot sasaran terlebih dahulu, terus masukkan ke slot itu!
+  if (activeTargetSlotIndex !== null) {
+    if (poolType === "hierarchy" && activeTargetSlotType === "hierarchy") {
+      placedHierarchySlots[activeTargetSlotIndex] = cardValue;
+      activeTargetSlotIndex = null;
+      activeTargetSlotType = null;
+      selectedCardValue = null;
+      renderParchmentBoard();
+      return;
+    } else if (poolType === "main" && activeTargetSlotType !== "hierarchy") {
+      if (activeTargetSlotType === "selangor") {
+        placedSelangorSlots[activeTargetSlotIndex] = cardValue;
+      } else {
+        placedSlots[activeTargetSlotIndex] = cardValue;
+      }
+      activeTargetSlotIndex = null;
+      activeTargetSlotType = null;
+      selectedCardValue = null;
+      renderParchmentBoard();
+      return;
+    }
+  }
+
+  // Jika pengguna menyentuh kad dahulu, masukkan secara automatik ke dalam slot kosong pertama
+  if (poolType === "hierarchy") {
+    const emptyIdx = placedHierarchySlots.findIndex(v => v === null);
+    if (emptyIdx !== -1) {
+      placedHierarchySlots[emptyIdx] = cardValue;
+      selectedCardValue = null;
+      setCompanionSpeech(`Kotak Hierarki ke-${emptyIdx + 1} diisi! Sentuh kotak itu jika mahu menukarnya.`);
+    } else {
+      selectedCardValue = cardValue;
+      selectedPoolType = "hierarchy";
+    }
+  } else if (sq.layoutType === "terengganu-selangor-tabs") {
+    const targetArr = currentTab3b === "terengganu" ? placedSlots : placedSelangorSlots;
+    const emptyIdx = targetArr.findIndex(v => v === null);
+    if (emptyIdx !== -1) {
+      targetArr[emptyIdx] = cardValue;
+      selectedCardValue = null;
+      setCompanionSpeech(`Warkah dimasukkan ke dalam tab ${currentTab3b.toUpperCase()}!`);
+    } else {
+      selectedCardValue = cardValue;
+      selectedPoolType = "main";
+    }
+  } else {
+    const emptyIdx = placedSlots.findIndex(v => v === null);
+    if (emptyIdx !== -1) {
+      placedSlots[emptyIdx] = cardValue;
+      selectedCardValue = null;
+      setCompanionSpeech(`Slot ke-${emptyIdx + 1} telah diisi!`);
+    } else {
+      selectedCardValue = cardValue;
+      selectedPoolType = "main";
+    }
+  }
+  renderParchmentBoard();
+}
+
+function handleSlotClick(slotIdx, slotType = "main") {
+  playSfxClick();
+  lastCheckResults = null;
+
+  let targetArr = placedSlots;
+  if (slotType === "hierarchy") targetArr = placedHierarchySlots;
+  else if (slotType === "selangor") targetArr = placedSelangorSlots;
+
+  // Jika ada kad yang sedang dipilih, letakkan ke dalam slot ini
+  if (selectedCardValue !== null) {
+    if ((slotType === "hierarchy" && selectedPoolType === "hierarchy") ||
+        (slotType !== "hierarchy" && selectedPoolType === "main")) {
+      targetArr[slotIdx] = selectedCardValue;
+      selectedCardValue = null;
+      activeTargetSlotIndex = null;
+      activeTargetSlotType = null;
+      renderParchmentBoard();
+      return;
+    }
+  }
+
+  // Jika slot sudah terisi, sentuhan akan mengosongkannya semula
+  if (targetArr[slotIdx] !== null) {
+    targetArr[slotIdx] = null;
+    activeTargetSlotIndex = slotIdx;
+    activeTargetSlotType = slotType;
+    setCompanionSpeech(`Slot ke-${slotIdx + 1} dikosongkan dan dipilih. Sekarang sentuh warkah baharu di bawah!`);
+    renderParchmentBoard();
+    return;
+  }
+
+  // Jika slot kosong disentuh dahulu (sangat mudah pada Phone & Tablet), tandakan sebagai sasaran aktif
+  if (activeTargetSlotIndex === slotIdx && activeTargetSlotType === slotType) {
+    activeTargetSlotIndex = null;
+    activeTargetSlotType = null;
+  } else {
+    activeTargetSlotIndex = slotIdx;
+    activeTargetSlotType = slotType;
+    setCompanionSpeech(`Slot ke-${slotIdx + 1} dipilih! Sekarang sentuh mana-mana kad warkah di bawah untuk memasukkannya.`);
+  }
+  renderParchmentBoard();
+
+  // Pada skrin kecil, skrol lembut ke arah dek kad supaya mudah dipilih
+  if (window.innerWidth <= 768 && activeTargetSlotIndex !== null) {
+    const deckId = slotType === "hierarchy" ? "hierarchy-deck-box" : "main-deck-box";
+    const deckEl = document.getElementById(deckId);
+    if (deckEl) deckEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+}
+
+function resetCurrentSubQuestion() {
+  playSfxClick();
+  initSubQuestionState();
+  setCompanionSpeech("Semua warkah telah dikosongkan dan digaul semula!");
+  renderParchmentBoard();
+}
+
+// ============================================================================
+// 9. SEMAK JAWAPAN, GANJARAN XP/KUPANG & RINGKASAN ZON SELESAI
+// ============================================================================
+function checkCurrentSubQuestion() {
+  const zone = ZONES_DATA.find(z => z.id === currentZoneId);
+  const sq = zone.subQuestions.find(s => s.key === currentSubKey);
+  const board = document.getElementById("parchment-board-content");
+
+  if (studyMode === "hafal") {
+    switchStudyMode("misi");
+    return;
+  }
+
+  if (sq.layoutType === "terengganu-selangor-tabs") {
+    if (placedSlots.some(v => v === null) || placedSelangorSlots.some(v => v === null)) {
+      renderParchmentBoard();
+      const fb = document.getElementById("feedback-box");
+      fb.className = "feedback-banner show err";
+      fb.innerHTML = "⚠️ Sila lengkapkan kesemua 5 slot (I) KESULTANAN TERENGGANU dan 6 slot (II) KESULTANAN SELANGOR sebelum menyemak jawapan.";
+      playSfxError();
+      fb.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+  } else if (sq.layoutType === "melaka-hierarchy-flow") {
+    if (placedHierarchySlots.some(v => v === null) || placedSlots.some(v => v === null)) {
+      renderParchmentBoard();
+      const fb = document.getElementById("feedback-box");
+      fb.className = "feedback-banner show err";
+      fb.innerHTML = "⚠️ Sila lengkapkan kesemua 5 kotak Hierarki Pentadbiran dan 6 slot Huraian di bawah sebelum menyemak jawapan.";
+      playSfxError();
+      fb.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+  } else {
+    if (placedSlots.some(v => v === null)) {
+      renderParchmentBoard();
+      const fb = document.getElementById("feedback-box");
+      fb.className = "feedback-banner show err";
+      fb.innerHTML = "⚠️ Masih ada slot kosong! Sila pilih warkah daripada Meja Warkah di bawah untuk mengisi semua slot terlebih dahulu.";
+      playSfxError();
+      fb.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+  }
+
+  let allCorrect = true;
+  let correctCount = 0;
+  lastCheckResults = { main: [], hierarchy: [], terengganu: [], selangor: [] };
+
+  if (sq.layoutType === "multi-select-bars") {
+    placedSlots.forEach((val, idx) => {
+      const isOk = sq.cards.includes(val) && placedSlots.indexOf(val) === idx;
+      lastCheckResults.main[idx] = isOk;
+      if (isOk) correctCount++; else allCorrect = false;
+    });
+  } else if (sq.layoutType === "terengganu-selangor-tabs") {
+    placedSlots.forEach((val, idx) => {
+      const isOk = sq.terengganuCards.includes(val);
+      lastCheckResults.terengganu[idx] = isOk;
+      if (isOk) correctCount++; else allCorrect = false;
+    });
+    placedSelangorSlots.forEach((val, idx) => {
+      const isOk = sq.selangorCards.includes(val);
+      lastCheckResults.selangor[idx] = isOk;
+      if (isOk) correctCount++; else allCorrect = false;
+    });
+  } else if (sq.layoutType === "melaka-hierarchy-flow") {
+    placedHierarchySlots.forEach((val, idx) => {
+      const isOk = val === sq.hierarchyCards[idx];
+      lastCheckResults.hierarchy[idx] = isOk;
+      if (isOk) correctCount++; else allCorrect = false;
+    });
+    placedSlots.forEach((val, idx) => {
+      const isOk = val === sq.cards[idx];
+      lastCheckResults.main[idx] = isOk;
+      if (isOk) correctCount++; else allCorrect = false;
+    });
+  } else {
+    placedSlots.forEach((val, idx) => {
+      const isOk = val === sq.cards[idx];
+      lastCheckResults.main[idx] = isOk;
+      if (isOk) correctCount++; else allCorrect = false;
+    });
+  }
+
+  renderParchmentBoard();
+  const fb = document.getElementById("feedback-box");
+
+  if (allCorrect) {
+    const firstTime = !completedSubQuestions[`${zone.id}-${sq.key}`];
+    completedSubQuestions[`${zone.id}-${sq.key}`] = true;
+    playerStreak++;
+    const earnedXp = (firstTime ? 50 : 20) + playerStreak * 5;
+    const earnedCoins = (firstTime ? 25 : 10) + playerStreak * 2;
+    playerXP += earnedXp;
+    playerCoins += earnedCoins;
+
+    const allZoneDone = zone.subQuestions.every(s => completedSubQuestions[`${zone.id}-${s.key}`]);
+    let artifactMsg = "";
+    if (allZoneDone && !unlockedArtifacts[zone.id]) {
+      unlockedArtifacts[zone.id] = true;
+      const art = ARTIFACTS_INFO.find(a => a.zoneId === zone.id);
+      artifactMsg = `<br>🏺 <strong>ARTIFAK DIRAJA DIPEROLEH: ${art.icon} ${art.name}!</strong> <button class="mini-tool-btn power-gold" style="margin-top:4px;" onclick="openZoneCompletionSummary(${zone.id})">📜 Lihat Ringkasan Zon</button>`;
+    }
+
+    updateRpgHud();
+    renderZoneSidebar();
+    burstVictoryConfetti();
+    playSfxVictory();
+
+    fb.className = "feedback-banner show ok";
+    fb.innerHTML = `🎉 <strong>SYABAS PAHLAWAN! Semua padanan 100% TEPAT!</strong> (+${earnedXp} XP, +${earnedCoins} 🪙 Kupang, Kombo ${playerStreak}x 🔥)${artifactMsg}`;
+    setCompanionSpeech(`Luar biasa! Jawapanmu 100% tepat! Kamu meraih +${earnedXp} XP dan +${earnedCoins} Syiling Kupang!`);
+    fb.scrollIntoView({ behavior: "smooth", block: "center" });
+  } else {
+    playerStreak = 0;
+    updateRpgHud();
+    playSfxError();
+    board.classList.remove("shake-board");
+    void board.offsetWidth;
+    board.classList.add("shake-board");
+
+    fb.className = "feedback-banner show err";
+    fb.innerHTML = `❌ <strong>${correctCount} slot betul, tetapi masih ada padanan yang kurang tepat (kotak merah).</strong> Sentuh kotak merah untuk menukarnya atau tekan <strong>🗡️ Petunjuk</strong>.`;
+    setCompanionSpeech("Jangan mengalah! Sentuh kotak berwarna merah untuk mengosongkannya dan cuba lagi.");
+    fb.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+}
+
+// ============================================================================
+// 10. MODAL RINGKASAN ZON, ARTIFAK, WATIKAH DIRAJA & SKEMA PENUH
+// ============================================================================
+function openZoneCompletionSummary(zoneId) {
+  playSfxVictory();
+  const z = ZONES_DATA.find(item => item.id === zoneId);
+  const art = ARTIFACTS_INFO.find(a => a.zoneId === zoneId);
+  document.getElementById("modal-title").textContent = `🏆 TAHNIAH! ${z.bannerTitle} SELESAI!`;
+  document.getElementById("modal-body").innerHTML = `
+    <div style="text-align:center;background:linear-gradient(180deg,#fef3c7,#fde68a);border:3px solid #d97706;border-radius:16px;padding:14px;">
+      <div style="font-size:3rem;">${art.icon}</div>
+      <div style="font-family:'Cinzel',serif;font-weight:900;font-size:1.1rem;color:#451a03;">Artifak Diperoleh: ${art.name}</div>
+      <p style="font-weight:700;color:#78350f;font-size:0.84rem;">Berikut ialah ringkasan semua jawapan asal dalam ${z.shortName} untuk ulang kaji pantas:</p>
+    </div>
+    ${z.subQuestions.map(sq => `
+      <div style="background:#fffbeb;border:2px solid #eab308;border-radius:12px;padding:12px 15px;">
+        <div style="font-weight:900;color:#1e293b;margin-bottom:6px;">${sq.qTitle} ${sq.marks}: ${sq.prompt}</div>
+        <ul style="padding-left:20px;display:flex;flex-direction:column;gap:4px;">
+          ${sq.cards.map(c => `<li style="font-weight:700;color:#0f172a;">${applyKeywordHighlight(c)}</li>`).join("")}
+        </ul>
+      </div>
+    `).join("")}
+  `;
+  document.getElementById("schema-modal").classList.add("open");
+}
+
+function openWatikahModal() {
+  playSfxCoin();
+  const totalSolved = Object.keys(completedSubQuestions).length;
+  const artCount = Object.keys(unlockedArtifacts).length;
+  const rankName = document.getElementById("hud-rank").textContent;
+
+  document.getElementById("modal-title").textContent = "🎖️ WATIKAH KEHORMATAN PENGEMBARA SEJARAH";
+  document.getElementById("modal-body").innerHTML = `
+    <div style="background:radial-gradient(circle,#fffbeb,#fde68a);border:4px double #b45309;border-radius:18px;padding:20px;text-align:center;">
+      <div style="font-size:2.5rem;">👑</div>
+      <h3 style="font-family:'Cinzel',serif;font-size:1.25rem;color:#451a03;margin-top:4px;">WATIKAH KECEMERLANGAN ALAM MELAYU</h3>
+      <p style="font-weight:700;color:#78350f;margin-top:4px;">Dianugerahkan kepada Pahlawan Sejarah dengan gelaran:</p>
+      <div style="font-family:'Cinzel',serif;font-size:1.4rem;font-weight:900;color:#b45309;margin:10px 0;">⚜ ${rankName} ⚜</div>
+      <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:12px 0;">
+        <div style="background:#fff;border:2px solid #d97706;border-radius:12px;padding:8px 14px;font-weight:800;">
+          ⭐ Jumlah XP: ${playerXP}
+        </div>
+        <div style="background:#fff;border:2px solid #d97706;border-radius:12px;padding:8px 14px;font-weight:800;">
+          ✅ Subsoalan Selesai: ${totalSolved} / 18
+        </div>
+        <div style="background:#fff;border:2px solid #d97706;border-radius:12px;padding:8px 14px;font-weight:800;">
+          🏺 Artifak Diraja: ${artCount} / 6
+        </div>
+      </div>
+      <p style="font-size:0.84rem;font-weight:700;color:#451a03;">Teruskan menyelesaikan kesemua 18 subsoalan di 6 Zon untuk bergelar <strong>Bendahara Agung Alam Melayu</strong>!</p>
+    </div>
+  `;
+  document.getElementById("schema-modal").classList.add("open");
+}
+
+function openArtifactsModal() {
+  playSfxClick();
+  document.getElementById("modal-title").textContent = "🏺 PETI ARTIFAK WARISAN ALAM MELAYU (6 ARTIFAK)";
+  document.getElementById("modal-body").innerHTML = `
+    <p style="font-weight:700;color:#78350f;">Lengkapkan kesemua 3 subsoalan (a), (b), dan (c) bagi setiap Zon untuk membuka Artifak Diraja:</p>
+    <div class="artifact-grid">
+      ${ARTIFACTS_INFO.map(a => {
+        const isUnl = !!unlockedArtifacts[a.zoneId];
+        return `
+          <div class="artifact-card ${isUnl ? '' : 'locked'}">
+            <div style="font-size:2.4rem;margin-bottom:6px;">${a.icon}</div>
+            <div style="font-weight:900;color:#451a03;font-size:0.92rem;">Zon ${a.zoneId}: ${a.name}</div>
+            <div style="font-size:0.78rem;color:#78350f;margin-top:4px;">${a.desc}</div>
+            <div style="margin-top:8px;font-weight:900;font-size:0.76rem;color:${isUnl ? '#16a34a' : '#dc2626'};">
+              ${isUnl ? '✅ TELAH DIMILIKI' : '🔒 BELUM DIBUKA'}
+            </div>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+  document.getElementById("schema-modal").classList.add("open");
+}
+
+function openCurrentQuestionSchema() {
+  playSfxClick();
+  const zone = ZONES_DATA.find(z => z.id === currentZoneId);
+  const sq = zone.subQuestions.find(s => s.key === currentSubKey);
+  document.getElementById("modal-title").textContent = `${zone.bannerTitle} — ${sq.qTitle}`;
+  document.getElementById("modal-body").innerHTML = `
+    <div style="background:#fef3c7;border:2px solid #d97706;border-radius:12px;padding:12px 15px;">
+      <div style="font-weight:900;color:#78350f;margin-bottom:4px;">${sq.qTitle} ${sq.marks}</div>
+      ${sq.stimulus ? `<div style="font-size:0.84rem;color:#92400e;margin-bottom:6px;">${sq.stimulus}</div>` : ``}
+      <div style="font-weight:800;color:#1e293b;margin-bottom:8px;">${sq.prompt}</div>
+      <div style="font-weight:800;color:#b45309;font-size:0.82rem;margin-bottom:6px;">${sq.schemaNote}</div>
+      <ul style="padding-left:20px;display:flex;flex-direction:column;gap:6px;">
+        ${sq.cards.map(c => `<li style="font-weight:700;color:#0f172a;">${applyKeywordHighlight(c)}</li>`).join("")}
+      </ul>
+    </div>
+  `;
+  document.getElementById("schema-modal").classList.add("open");
+}
+
+function openFullSchemaModal() {
+  playSfxClick();
+  document.getElementById("modal-title").textContent = "📜 SKEMA JAWAPAN LENGKAP (ZON 1 HINGGA ZON 6)";
+  document.getElementById("modal-body").innerHTML = ZONES_DATA.map(z => `
+    <div style="border:2px solid #d97706;border-radius:14px;padding:12px 15px;background:#fffbeb;">
+      <h3 style="color:#78350f;margin-bottom:8px;font-size:1rem;">${z.bannerTitle} (${z.bannerSub})</h3>
+      ${z.subQuestions.map(sq => `
+        <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px dashed #d97706;">
+          <div style="font-weight:900;color:#1e293b;">${sq.qTitle} ${sq.marks}: ${sq.prompt}</div>
+          <ul style="padding-left:20px;margin-top:4px;">
+            ${sq.cards.map(c => `<li style="font-weight:600;">${applyKeywordHighlight(c)}</li>`).join("")}
+          </ul>
+        </div>
+      `).join("")}
+    </div>
+  `).join("");
+  document.getElementById("schema-modal").classList.add("open");
+}
+
+function closeSchemaModal() {
+  document.getElementById("schema-modal").classList.remove("open");
+}
+
+// ============================================================================
+// 11. ENJIN ZARAH KUNANG-KUNANG EMAS & KONFETI KEMENANGAN (CANVAS 2D)
+// ============================================================================
+const fxCanvas = document.getElementById("fx-canvas");
+const fxCtx = fxCanvas.getContext("2d");
+let fireflies = [];
+let confettiPieces = [];
+
+function resizeFxCanvas() {
+  fxCanvas.width = window.innerWidth;
+  fxCanvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resizeFxCanvas);
+resizeFxCanvas();
+
+for (let i = 0; i < 26; i++) {
+  fireflies.push({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    r: Math.random() * 2.5 + 1.2,
+    vx: (Math.random() - 0.5) * 0.4,
+    vy: -Math.random() * 0.5 - 0.15,
+    alpha: Math.random() * 0.7 + 0.2
+  });
+}
+
+function burstVictoryConfetti() {
+  const colors = ["#fde047", "#f59e0b", "#22c55e", "#38bdf8", "#f43f5e", "#a855f7"];
+  for (let i = 0; i < 75; i++) {
+    confettiPieces.push({
+      x: window.innerWidth * 0.5 + (Math.random() - 0.5) * 200,
+      y: window.innerHeight * 0.45,
+      vx: (Math.random() - 0.5) * 11,
+      vy: -Math.random() * 10 - 3,
+      size: Math.random() * 8 + 5,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rot: Math.random() * Math.PI * 2,
+      vrot: (Math.random() - 0.5) * 0.2,
+      life: 110
+    });
+  }
+}
+
+function animateFxLoop() {
+  fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+
+  for (const f of fireflies) {
+    f.x += f.vx;
+    f.y += f.vy;
+    if (f.y < -10) f.y = fxCanvas.height + 10;
+    if (f.x < -10) f.x = fxCanvas.width + 10;
+    if (f.x > fxCanvas.width + 10) f.x = -10;
+
+    fxCtx.beginPath();
+    fxCtx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+    fxCtx.fillStyle = `rgba(255, 235, 140, ${f.alpha})`;
+    fxCtx.fill();
+  }
+
+  for (let i = confettiPieces.length - 1; i >= 0; i--) {
+    const p = confettiPieces[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.26;
+    p.rot += p.vrot;
+    p.life--;
+
+    fxCtx.save();
+    fxCtx.translate(p.x, p.y);
+    fxCtx.rotate(p.rot);
+    fxCtx.fillStyle = p.color;
+    fxCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.65);
+    fxCtx.restore();
+
+    if (p.life <= 0) confettiPieces.splice(i, 1);
+  }
+
+  requestAnimationFrame(animateFxLoop);
+}
+animateFxLoop();
+updateRpgHud();
+</script>
+</body>
+</html>
